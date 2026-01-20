@@ -365,9 +365,19 @@ class SUNOPlaylist {
 
     // Load playlist from URL parameters
     loadFromURL() {
+        // Check for short URL format first: /p/abc123
+        const path = window.location.pathname;
+        if (path.startsWith('/p/')) {
+            const shortId = path.substring(3);
+            if (shortId) {
+                this.loadFromShortUrl(shortId);
+                return;
+            }
+        }
+
         const params = new URLSearchParams(window.location.search);
 
-        // Try compressed format first (new format: ?p=compressed_string)
+        // Try compressed format (fallback: ?p=compressed_string)
         const compressed = params.get('p');
         if (compressed) {
             try {
@@ -401,6 +411,39 @@ class SUNOPlaylist {
                 // Auto-load the playlist
                 setTimeout(() => this.loadPlaylist(), 500);
             }
+        }
+    }
+
+    // Load playlist from short URL (KV-based)
+    async loadFromShortUrl(shortId) {
+        this.showToast('プレイリストを読み込み中...');
+
+        try {
+            const response = await fetch(`/api/get-playlist?id=${shortId}`);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    this.showToast('プレイリストが見つかりません', 'error');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data.uuids && data.uuids.length > 0) {
+                // Convert UUIDs to full URLs for the input
+                const urls = data.uuids.map(uuid => `https://suno.com/song/${uuid}`);
+                this.elements.linksInput.value = urls.join('\n');
+                // Auto-load the playlist
+                setTimeout(() => this.loadPlaylist(), 500);
+            } else {
+                this.showToast('プレイリストが空です', 'warning');
+            }
+        } catch (error) {
+            console.error('Failed to load short URL:', error);
+            this.showToast('プレイリストの読み込みに失敗しました', 'error');
         }
     }
 
@@ -681,11 +724,30 @@ class SUNOPlaylist {
         this.elements.shareDropdown?.classList.toggle('show');
     }
 
-    // Get share URL (compressed)
-    getShareUrl() {
-        const uuids = this.playlist.map(t => t.uuid).join(',');
-        const compressed = LZString.compressToEncodedURIComponent(uuids);
-        return `${window.location.origin}${window.location.pathname}?p=${compressed}`;
+    // Get share URL (short KV-based URL)
+    async getShareUrl() {
+        try {
+            const uuids = this.playlist.map(t => t.uuid);
+
+            const response = await fetch('/api/save-playlist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ uuids })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            return `${window.location.origin}/p/${data.id}`;
+        } catch (error) {
+            console.error('Failed to generate short URL:', error);
+            // Fallback to compressed URL if API fails
+            const uuids = this.playlist.map(t => t.uuid).join(',');
+            const compressed = LZString.compressToEncodedURIComponent(uuids);
+            return `${window.location.origin}${window.location.pathname}?p=${compressed}`;
+        }
     }
 
     // Get share text
@@ -699,10 +761,11 @@ class SUNOPlaylist {
     }
 
     // Share to Twitter/X
-    shareToTwitter() {
+    async shareToTwitter() {
         if (this.playlist.length === 0) return;
 
-        const url = this.getShareUrl();
+        this.showToast('短縮URL生成中...');
+        const url = await this.getShareUrl();
         const text = this.getShareText();
         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
 
@@ -712,10 +775,11 @@ class SUNOPlaylist {
     }
 
     // Share to LINE
-    shareToLine() {
+    async shareToLine() {
         if (this.playlist.length === 0) return;
 
-        const url = this.getShareUrl();
+        this.showToast('短縮URL生成中...');
+        const url = await this.getShareUrl();
         const text = this.getShareText();
         const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
 
@@ -725,10 +789,11 @@ class SUNOPlaylist {
     }
 
     // Share to Facebook
-    shareToFacebook() {
+    async shareToFacebook() {
         if (this.playlist.length === 0) return;
 
-        const url = this.getShareUrl();
+        this.showToast('短縮URL生成中...');
+        const url = await this.getShareUrl();
         const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
 
         window.open(facebookUrl, '_blank', 'width=550,height=420');
@@ -740,7 +805,8 @@ class SUNOPlaylist {
     async copyShareUrl() {
         if (this.playlist.length === 0) return;
 
-        const url = this.getShareUrl();
+        this.showToast('短縮URL生成中...');
+        const url = await this.getShareUrl();
 
         try {
             await navigator.clipboard.writeText(url);

@@ -2,6 +2,10 @@
   "version": 2,
   "rewrites": [
     {
+      "source": "/p/:id",
+      "destination": "/index.html"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     }
