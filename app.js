@@ -196,6 +196,8 @@ class SUNOPlaylist {
             repeatBtn: document.getElementById('repeatBtn'),
             repeatIcon: document.getElementById('repeatIcon'),
             clearBtn: document.getElementById('clearBtn'),
+            importBtn: document.getElementById('importBtn'),
+            importFile: document.getElementById('importFile'),
             downloadBtn: document.getElementById('downloadBtn'),
             progressBar: document.getElementById('progressBar'),
             progress: document.getElementById('progress'),
@@ -251,6 +253,8 @@ class SUNOPlaylist {
         this.elements.shuffleBtn.addEventListener('click', () => this.toggleShuffle());
         this.elements.repeatBtn.addEventListener('click', () => this.toggleRepeat());
         this.elements.clearBtn.addEventListener('click', () => this.clearPlaylist());
+        this.elements.importBtn.addEventListener('click', () => this.triggerImport());
+        this.elements.importFile.addEventListener('change', (e) => this.importPlaylist(e));
         this.elements.downloadBtn.addEventListener('click', () => this.downloadPlaylist());
         this.elements.volumeSlider.addEventListener('input', (e) => this.setVolume(e.target.value));
         this.elements.progressBar.addEventListener('click', (e) => this.seek(e));
@@ -1086,6 +1090,67 @@ class SUNOPlaylist {
             this.updateShuffleButton();
             this.updateRepeatButton();
             this.showToast('プレイリストをクリアしました', 'success');
+        }
+    }
+
+    // Trigger file import
+    triggerImport() {
+        this.elements.importFile.click();
+    }
+
+    // Import playlist from JSON file
+    async importPlaylist(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Reset file input for reuse
+        event.target.value = '';
+
+        if (!file.name.endsWith('.json')) {
+            this.showToast('JSONファイルを選択してください', 'error');
+            return;
+        }
+
+        try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+
+            // Validate JSON structure
+            if (!data.tracks || !Array.isArray(data.tracks)) {
+                throw new Error('Invalid playlist format');
+            }
+
+            if (data.tracks.length === 0) {
+                this.showToast('プレイリストが空です', 'warning');
+                return;
+            }
+
+            // Validate each track has required fields
+            const validTracks = data.tracks.filter(t => t.uuid || t.url);
+
+            if (validTracks.length === 0) {
+                throw new Error('有効な曲が見つかりません');
+            }
+
+            // Convert tracks to URLs
+            const urls = validTracks.map(track => {
+                if (track.uuid) {
+                    return `https://suno.com/song/${track.uuid}`;
+                } else if (track.url) {
+                    return track.url;
+                }
+            }).filter(url => url);
+
+            // Load the playlist
+            this.elements.linksInput.value = urls.join('\n');
+            this.showToast(`${validTracks.length}曲をインポートしました`, 'success');
+
+            // Auto-load the playlist
+            setTimeout(() => this.loadPlaylist(), 500);
+
+        } catch (error) {
+            console.error('Import error:', error);
+            this.showToast('ファイルの読み込みに失敗しました', 'error');
         }
     }
 
