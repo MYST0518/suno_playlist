@@ -366,8 +366,32 @@ class SUNOPlaylist {
     // Load playlist from URL parameters
     loadFromURL() {
         const params = new URLSearchParams(window.location.search);
-        const tracks = params.get('tracks');
 
+        // Try compressed format first (new format: ?p=compressed_string)
+        const compressed = params.get('p');
+        if (compressed) {
+            try {
+                // Decompress the playlist data
+                const decompressed = LZString.decompressFromEncodedURIComponent(compressed);
+                if (decompressed) {
+                    const uuids = decompressed.split(',');
+                    if (uuids.length > 0) {
+                        // Convert UUIDs to full URLs for the input
+                        const urls = uuids.map(uuid => `https://suno.com/song/${uuid}`);
+                        this.elements.linksInput.value = urls.join('\n');
+                        // Auto-load the playlist
+                        setTimeout(() => this.loadPlaylist(), 500);
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to decompress playlist URL:', error);
+                this.showToast('URLの展開に失敗しました', 'error');
+            }
+        }
+
+        // Fallback to legacy format (old format: ?tracks=uuid1,uuid2,...)
+        const tracks = params.get('tracks');
         if (tracks) {
             const uuids = tracks.split(',');
             if (uuids.length > 0) {
@@ -637,12 +661,14 @@ class SUNOPlaylist {
         this.autoSave();
     }
 
-    // Update URL with current playlist for sharing
+    // Update URL with current playlist for sharing (compressed)
     updateURL() {
         if (this.playlist.length === 0) return;
 
         const uuids = this.playlist.map(t => t.uuid).join(',');
-        const newUrl = `${window.location.pathname}?tracks=${uuids}`;
+        // Compress the UUIDs using LZ-String
+        const compressed = LZString.compressToEncodedURIComponent(uuids);
+        const newUrl = `${window.location.pathname}?p=${compressed}`;
         window.history.replaceState({}, '', newUrl);
     }
 
@@ -655,10 +681,11 @@ class SUNOPlaylist {
         this.elements.shareDropdown?.classList.toggle('show');
     }
 
-    // Get share URL
+    // Get share URL (compressed)
     getShareUrl() {
         const uuids = this.playlist.map(t => t.uuid).join(',');
-        return `${window.location.origin}${window.location.pathname}?tracks=${uuids}`;
+        const compressed = LZString.compressToEncodedURIComponent(uuids);
+        return `${window.location.origin}${window.location.pathname}?p=${compressed}`;
     }
 
     // Get share text
