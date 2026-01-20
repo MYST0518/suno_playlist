@@ -261,6 +261,14 @@ class SUNOPlaylist {
         this.elements.helpBtn.addEventListener('click', () => this.toggleHelpModal());
         this.elements.closeHelpBtn.addEventListener('click', () => this.toggleHelpModal());
 
+        // Help modal tab switching
+        document.querySelectorAll('.help-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const tabName = e.target.dataset.tab;
+                this.switchHelpTab(tabName);
+            });
+        });
+
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.share-container')) {
@@ -1186,6 +1194,26 @@ class SUNOPlaylist {
     // Toggle help modal
     toggleHelpModal() {
         this.elements.helpModal.classList.toggle('show');
+    }
+
+    // Switch help tab
+    switchHelpTab(tabName) {
+        // Remove active class from all tabs and contents
+        document.querySelectorAll('.help-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll('.help-tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+
+        // Add active class to clicked tab and corresponding content
+        const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
+        const activeContent = document.getElementById(`${tabName}Tab`);
+
+        if (activeTab && activeContent) {
+            activeTab.classList.add('active');
+            activeContent.classList.add('active');
+        }
     }
 
     // Update progress bar

@@ -166,33 +166,87 @@
         <!-- Help Modal -->
         <div class="help-modal" id="helpModal">
             <div class="help-content">
-                <h3>⌨️ キーボードショートカット</h3>
-                <div class="shortcut-list">
-                    <div class="shortcut-item">
-                        <kbd>Space</kbd>
-                        <span>再生/停止</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>N</kbd>
-                        <span>次の曲</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>P</kbd>
-                        <span>前の曲</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>←</kbd>
-                        <span>5秒戻る</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>→</kbd>
-                        <span>5秒進む</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>M</kbd>
-                        <span>ミュート</span>
+                <h3>📖 ヘルプ</h3>
+
+                <!-- Tabs -->
+                <div class="help-tabs">
+                    <button class="help-tab active" data-tab="shortcuts">⌨️ ショートカット</button>
+                    <button class="help-tab" data-tab="usage">📝 使い方</button>
+                </div>
+
+                <!-- Shortcuts Tab -->
+                <div class="help-tab-content active" id="shortcutsTab">
+                    <div class="shortcut-list">
+                        <div class="shortcut-item">
+                            <kbd>Space</kbd>
+                            <span>再生/停止</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>N</kbd>
+                            <span>次の曲</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>P</kbd>
+                            <span>前の曲</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>←</kbd>
+                            <span>5秒戻る</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>→</kbd>
+                            <span>5秒進む</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>M</kbd>
+                            <span>ミュート</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Usage Tab -->
+                <div class="help-tab-content" id="usageTab">
+                    <div class="usage-guide">
+                        <div class="usage-section">
+                            <h4>🎵 プレイリストの作り方</h4>
+                            <ol>
+                                <li>SUNOのリンクを入力欄にペースト（1行に1曲）</li>
+                                <li>「プレイリスト作成」ボタンをクリック</li>
+                                <li>自動的にタイトルとアーティスト名を取得します</li>
+                            </ol>
+                        </div>
+
+                        <div class="usage-section">
+                            <h4>🔗 共有する</h4>
+                            <p>🔗ボタンから共有方法を選択：</p>
+                            <ul>
+                                <li><strong>X (Twitter)</strong>: ツイートで共有</li>
+                                <li><strong>LINE</strong>: LINEで送信</li>
+                                <li><strong>Facebook</strong>: Facebookに投稿</li>
+                                <li><strong>URLコピー</strong>: 短縮URLをコピー</li>
+                            </ul>
+                        </div>
+
+                        <div class="usage-section">
+                            <h4>💾 保存と復元</h4>
+                            <ul>
+                                <li><strong>💾ダウンロード</strong>: プレイリストをJSONファイルで保存</li>
+                                <li><strong>📥インポート</strong>: 保存したJSONファイルを読み込み</li>
+                                <li><strong>📜履歴</strong>: 最近のプレイリスト10件を表示</li>
+                            </ul>
+                        </div>
+
+                        <div class="usage-section">
+                            <h4>🎮 便利な機能</h4>
+                            <ul>
+                                <li><strong>🔀シャッフル</strong>: ランダム順で再生</li>
+                                <li><strong>🔁リピート</strong>: 全曲/1曲/なし を切替</li>
+                                <li><strong>⭐お気に入り</strong>: 履歴から星マークで保存</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <button class="btn btn-primary" id="closeHelpBtn">閉じる</button>
             </div>
         </div>
