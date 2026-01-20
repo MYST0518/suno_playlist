@@ -1465,3 +1465,76 @@ class SUNOPlaylist {
 document.addEventListener('DOMContentLoaded', () => {
     window.sunoPlaylist = new SUNOPlaylist();
 });
+
+// ===================================
+//    PWA Service Worker Registration
+// ===================================
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+                console.log('[PWA] Service Worker registered:', registration.scope);
+
+                // Check for updates
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    console.log('[PWA] New Service Worker found, installing...');
+
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'activated') {
+                            console.log('[PWA] New Service Worker activated');
+                            // Optionally show update notification
+                            if (window.sunoPlaylist) {
+                                window.sunoPlaylist.showToast('アプリが更新されました', 'success');
+                            }
+                        }
+                    });
+                });
+            })
+            .catch((error) => {
+                console.error('[PWA] Service Worker registration failed:', error);
+            });
+    });
+}
+
+// PWA Install Prompt
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('[PWA] beforeinstallprompt event fired');
+    // Prevent the mini-infobar from appearing
+    e.preventDefault();
+    // Store the event for later use
+    deferredPrompt = e;
+
+    // Optional: Show custom install button
+    // You can add a button in the UI to trigger installation
+});
+
+window.addEventListener('appinstalled', () => {
+    console.log('[PWA] App installed successfully');
+    deferredPrompt = null;
+    if (window.sunoPlaylist) {
+        window.sunoPlaylist.showToast('アプリをインストールしました！', 'success');
+    }
+});
+
+// Function to trigger PWA install (can be called from a button)
+window.installPWA = async () => {
+    if (!deferredPrompt) {
+        console.log('[PWA] Install prompt not available');
+        return;
+    }
+
+    // Show the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user's response
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`[PWA] User choice: ${outcome}`);
+
+    // Clear the prompt
+    deferredPrompt = null;
+};
