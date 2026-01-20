@@ -2,7 +2,9 @@
 
 SUNOのAI生成音楽をプレイリストで楽しめるWebアプリ
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=YOUR_REPO_URL)
+**公開URL**: https://suno-playlist.vercel.app/
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/MYST0518/suno_playlist)
 
 ## ✨ 機能
 
@@ -10,7 +12,14 @@ SUNOのAI生成音楽をプレイリストで楽しめるWebアプリ
 - 📝 **プレイリスト作成** - SUNOリンク（通常/短縮）からプレイリスト生成
 - 🎵 **音楽再生** - 連続再生、前へ/次へ、シーク、音量調整
 - 📊 **メタデータ自動取得** - タイトル、アーティスト名を自動取得
-- 🔗 **URL共有** - プレイリストを共有可能なURLで生成
+- 🔗 **短縮URL共有** - 超短いURL（`/p/abc123`）でプレイリスト共有
+
+### データ管理
+- 💾 **JSONエクスポート** - プレイリストをJSONファイルでダウンロード
+- 📥 **JSONインポート** - 保存したプレイリストを復元
+- 📜 **履歴管理** - 最大10件の履歴を保持（LocalStorage）
+- ⭐ **お気に入り** - 重要なプレイリストに星マーク
+- 🔄 **自動復元** - ページリロード時に前回のプレイリストを復元提案
 
 ### エラーハンドリング
 - 🔄 **リトライ機能** - 指数バックオフで最大3回再試行
@@ -24,20 +33,18 @@ SUNOのAI生成音楽をプレイリストで楽しめるWebアプリ
 - 🔁 **リピートモード** - none/all/one の3モード
 - 📜 **ヘルプモーダル** - ショートカット一覧表示
 
-### プレイリスト永続化
-- 💾 **自動保存** - LocalStorageに自動保存
-- 📜 **履歴管理** - 最大10件の履歴を保持
-- ⭐ **お気に入り** - 重要なプレイリストに星マーク
-- 🔄 **自動復元** - ページリロード時に前回のプレイリストを復元提案
-
 ## 🚀 デプロイ
 
 ### Vercelにデプロイ
 
-1. GitHubにリポジトリをプッシュ
-2. [Vercel](https://vercel.com)にログイン
-3. 「New Project」からリポジトリをインポート
-4. 「Deploy」をクリック
+1. **GitHubにリポジトリをプッシュ**
+2. **[Vercel](https://vercel.com)にログイン**
+3. **Vercel KVを作成**
+   - プロジェクトのStorageタブ → Create Database
+   - Upstash (Redis) を選択
+   - プロジェクトに接続
+4. **「New Project」からリポジトリをインポート**
+5. **「Deploy」をクリック**
 
 ## 💻 ローカル開発
 
@@ -61,21 +68,26 @@ vercel dev
 ```
 suno-playlist-player/
 ├── api/
-│   ├── metadata.js    # メタデータ取得API
-│   └── resolve.js     # 短縮リンク解決API
-├── index.html         # メインHTML
-├── app.js            # クライアントJS
-├── styles.css        # スタイル
-├── vercel.json       # Vercel設定
-├── package.json      # npm設定
-└── README.md         # このファイル
+│   ├── metadata.js      # メタデータ取得API
+│   ├── resolve.js       # 短縮リンク解決API
+│   ├── save-playlist.js # プレイリスト保存（KV）
+│   └── get-playlist.js  # プレイリスト取得（KV）
+├── index.html           # メインHTML
+├── app.js               # クライアントJS
+├── styles.css           # スタイル
+├── favicon.png          # ファビコン
+├── vercel.json          # Vercel設定
+├── package.json         # npm設定
+└── README.md            # このファイル
 ```
 
 ## 🛠️ 技術スタック
 
 - **フロントエンド**: HTML/CSS/JavaScript（Vanilla）
 - **バックエンド**: Vercel Serverless Functions
-- **ストレージ**: LocalStorage API
+- **データベース**: Vercel KV (Redis) - 短縮URL用
+- **ストレージ**: LocalStorage API - 履歴・お気に入り
+- **URL圧縮**: LZ-String（フォールバック用）
 - **デプロイ**: Vercel
 
 ## ⌨️ キーボードショートカット
@@ -88,6 +100,22 @@ suno-playlist-player/
 | `←` | 5秒戻る |
 | `→` | 5秒進む |
 | `M` | ミュート/ミュート解除 |
+
+## 🔗 URL共有フォーマット
+
+### 短縮URL（推奨）
+```
+https://suno-playlist.vercel.app/p/abc123
+```
+- Vercel KVに保存（30日間有効）
+- 超短くて共有しやすい
+
+### 圧縮URL（フォールバック）
+```
+https://suno-playlist.vercel.app/?p=N4IgdghgtgpiBcIA...
+```
+- LZ-String圧縮
+- KVが利用できない場合に自動使用
 
 ## 📝 ライセンス
 
