@@ -2,6 +2,85 @@
 // SUNO Playlist Player - App Logic (Enhanced)
 // ===================================
 
+// ===================================
+//    Internationalization Manager
+// ===================================
+class I18nManager {
+    constructor() {
+        this.LANG_KEY = 'suno_language';
+        this.currentLang = this.detectLanguage();
+        this.translations = window.translations || {};
+    }
+
+    // Detect user's language
+    detectLanguage() {
+        // Priority: LocalStorage > Browser Language > Default (ja)
+        const stored = localStorage.getItem(this.LANG_KEY);
+        if (stored && this.translations[stored]) {
+            return stored;
+        }
+
+        // Browser language detection
+        const browserLang = navigator.language || navigator.userLanguage;
+        const langCode = browserLang.split('-')[0]; // en-US -> en
+
+        // Map to supported languages
+        const supported = ['ja', 'en', 'zh', 'ko'];
+        if (supported.includes(langCode)) {
+            return langCode;
+        }
+
+        // Default to Japanese
+        return 'ja';
+    }
+
+    // Get translation
+    t(key) {
+        const lang = this.translations[this.currentLang];
+        return lang && lang[key] ? lang[key] : key;
+    }
+
+    // Set language
+    setLanguage(lang) {
+        if (!this.translations[lang]) {
+            console.error(`Language ${lang} not supported`);
+            return;
+        }
+
+        this.currentLang = lang;
+        localStorage.setItem(this.LANG_KEY, lang);
+        this.updateDOM();
+    }
+
+    // Update all DOM elements with data-i18n attribute
+    updateDOM() {
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            const translation = this.t(key);
+
+            // Update element text
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                element.placeholder = translation;
+            } else {
+                element.textContent = translation;
+            }
+        });
+
+        // Update document title
+        document.title = this.t('appName');
+
+        // Dispatch event for custom updates
+        window.dispatchEvent(new CustomEvent('languageChanged', {
+            detail: { lang: this.currentLang }
+        }));
+    }
+
+    // Get current language
+    getCurrentLanguage() {
+        return this.currentLang;
+    }
+}
+
 // Playlist Storage Manager
 class PlaylistStorage {
     constructor() {
@@ -1538,3 +1617,55 @@ window.installPWA = async () => {
     // Clear the prompt
     deferredPrompt = null;
 };
+
+// ===================================
+//    I18n Initialization
+// ===================================
+
+// Initialize i18n
+window.i18n = new I18nManager();
+
+// Apply initial translations on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize i18n
+    window.i18n.updateDOM();
+
+    // Language selector event listeners
+    const languageBtn = document.getElementById('languageBtn');
+    const languageDropdown = document.getElementById('languageDropdown');
+
+    if (languageBtn && languageDropdown) {
+        // Toggle dropdown
+        languageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.language-selector')) {
+                languageDropdown.classList.remove('show');
+            }
+        });
+
+        // Language option click
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                const lang = option.getAttribute('data-lang');
+                window.i18n.setLanguage(lang);
+                languageDropdown.classList.remove('show');
+
+                // Show toast
+                if (window.sunoPlaylist) {
+                    const langNames = {
+                        ja: '日本語',
+                        en: 'English',
+                        zh: '中文',
+                        ko: '한국어'
+                    };
+                    window.sunoPlaylist.showToast(`${langNames[lang]}`, 'success');
+                }
+            });
+        });
+    }
+});

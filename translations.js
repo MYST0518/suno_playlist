@@ -1,0 +1,509 @@
+// Translation data for SUNO Playlist Player
+// Supported languages: ja (Japanese), en (English), zh (Chinese Simplified), ko (Korean)
+
+const translations = {
+    ja: {
+        // App Info
+        appName: 'SUNO Playlist Player',
+        appTitle: 'SUNO Playlist',
+        appDescription: 'SUNOのリンクをまとめて連続再生',
+
+        // Input Section
+        inputTitle: 'リンク入力',
+        inputPlaceholder: 'SUNOの曲リンク（1行に1曲）または短縮リンク（s.suno.ai/xxxxx）を入力してください',
+        loadPlaylistBtn: 'プレイリスト作成',
+
+        // Player Controls
+        previous: '前へ',
+        play: '再生',
+        pause: '一時停止',
+        next: '次へ',
+        shuffle: 'シャッフル',
+        repeat: 'リピート',
+        none: 'なし',
+        all: '全曲',
+        one: '1曲',
+
+        // Playlist
+        playlistTitle: 'プレイリスト',
+        trackCount: '曲',
+        emptyPlaylist: 'プレイリストが空です',
+
+        // Actions
+        clear: 'クリア',
+        download: 'ダウンロード',
+        import: 'インポート',
+        share: '共有',
+        history: '履歴',
+        help: 'ヘルプ',
+
+        // Share Options
+        shareTwitter: 'X (Twitter)で共有',
+        shareLine: 'LINEで共有',
+        shareFacebook: 'Facebookで共有',
+        shareCopy: 'URLをコピー',
+
+        // Help Modal
+        helpTitle: 'ヘルプ',
+        shortcutsTab: 'ショートカット',
+        usageTab: '使い方',
+
+        // Keyboard Shortcuts
+        keySpace: 'Space',
+        keyN: 'N',
+        keyP: 'P',
+        keyLeft: '←',
+        keyRight: '→',
+        keyM: 'M',
+        actionPlay: '再生/停止',
+        actionNext: '次の曲',
+        actionPrev: '前の曲',
+        actionSeekBack: '5秒戻る',
+        actionSeekForward: '5秒進む',
+        actionMute: 'ミュート',
+
+        // Usage Guide
+        usageCreateTitle: 'プレイリストの作り方',
+        usageCreateStep1: 'SUNOのリンクを入力欄にペースト（1行に1曲）',
+        usageCreateStep2: '「プレイリスト作成」ボタンをクリック',
+        usageCreateStep3: '自動的にタイトルとアーティスト名を取得します',
+
+        usageShareTitle: '共有する',
+        usageShareDesc: '🔗ボタンから共有方法を選択：',
+        usageShareTwitter: 'ツイートで共有',
+        usageShareLine: 'LINEで送信',
+        usageShareFacebook: 'Facebookに投稿',
+        usageShareUrl: '短縮URLをコピー',
+
+        usageSaveTitle: '保存と復元',
+        usageSaveDownload: 'プレイリストをJSONファイルで保存',
+        usageSaveImport: '保存したJSONファイルを読み込み',
+        usageSaveHistory: '最近のプレイリスト10件を表示',
+
+        usageFeaturesTitle: '便利な機能',
+        usageFeatureShuffle: 'ランダム順で再生',
+        usageFeatureRepeat: '全曲/1曲/なし を切替',
+        usageFeatureFavorite: '履歴から星マークで保存',
+
+        // History Modal
+        historyTitle: 'プレイリスト履歴',
+        historyFavorites: 'お気に入り',
+        historyRecent: '最近の履歴',
+        historyEmpty: '履歴がありません',
+        historyLoad: '読込',
+        historyFavorite: 'お気に入り',
+        historyDelete: '削除',
+
+        // Toast Messages
+        toastUrlCopied: 'URLをコピーしました！',
+        toastPlaylistSaved: 'プレイリストをダウンロードしました',
+        toastPlaylistImported: '曲をインポートしました',
+        toastPlaylistCleared: 'プレイリストをクリアしました',
+        toastFavoriteAdded: 'お気に入りに追加',
+        toastFavoriteRemoved: 'お気に入りから削除',
+        toastSharing: '共有中...',
+        toastGeneratingUrl: '短縮URL生成中...',
+        toastLoading: '読み込み中...',
+        toastUpdated: 'アプリが更新されました',
+        toastInstalled: 'アプリをインストールしました！',
+
+        // Error Messages
+        errorEmpty: 'プレイリストが空です',
+        errorInvalidJson: 'JSONファイルを選択してください',
+        errorLoadFailed: 'ファイルの読み込みに失敗しました',
+        errorPlaylistNotFound: 'プレイリストが見つかりません',
+        errorOffline: 'オフラインです',
+
+        // Buttons
+        close: '閉じる',
+        cancel: 'キャンセル',
+        ok: 'OK',
+
+        // Language Selector
+        language: '言語',
+        langJa: '日本語',
+        langEn: 'English',
+        langZh: '中文',
+        langKo: '한국어'
+    },
+
+    en: {
+        // App Info
+        appName: 'SUNO Playlist Player',
+        appTitle: 'SUNO Playlist',
+        appDescription: 'Play SUNO music continuously',
+
+        // Input Section
+        inputTitle: 'Add Links',
+        inputPlaceholder: 'Paste SUNO song links (one per line) or short links (s.suno.ai/xxxxx)',
+        loadPlaylistBtn: 'Create Playlist',
+
+        // Player Controls
+        previous: 'Previous',
+        play: 'Play',
+        pause: 'Pause',
+        next: 'Next',
+        shuffle: 'Shuffle',
+        repeat: 'Repeat',
+        none: 'None',
+        all: 'All',
+        one: 'One',
+
+        // Playlist
+        playlistTitle: 'Playlist',
+        trackCount: 'tracks',
+        emptyPlaylist: 'Playlist is empty',
+
+        // Actions
+        clear: 'Clear',
+        download: 'Download',
+        import: 'Import',
+        share: 'Share',
+        history: 'History',
+        help: 'Help',
+
+        // Share Options
+        shareTwitter: 'Share on X (Twitter)',
+        shareLine: 'Share on LINE',
+        shareFacebook: 'Share on Facebook',
+        shareCopy: 'Copy URL',
+
+        // Help Modal
+        helpTitle: 'Help',
+        shortcutsTab: 'Shortcuts',
+        usageTab: 'Usage Guide',
+
+        // Keyboard Shortcuts
+        keySpace: 'Space',
+        keyN: 'N',
+        keyP: 'P',
+        keyLeft: '←',
+        keyRight: '→',
+        keyM: 'M',
+        actionPlay: 'Play/Pause',
+        actionNext: 'Next Track',
+        actionPrev: 'Previous Track',
+        actionSeekBack: 'Seek -5s',
+        actionSeekForward: 'Seek +5s',
+        actionMute: 'Mute',
+
+        // Usage Guide
+        usageCreateTitle: 'How to Create Playlist',
+        usageCreateStep1: 'Paste SUNO links (one per line)',
+        usageCreateStep2: 'Click "Create Playlist" button',
+        usageCreateStep3: 'Track info will be loaded automatically',
+
+        usageShareTitle: 'Share Playlist',
+        usageShareDesc: 'Choose sharing method from 🔗 button:',
+        usageShareTwitter: 'Share via Tweet',
+        usageShareLine: 'Send via LINE',
+        usageShareFacebook: 'Post to Facebook',
+        usageShareUrl: 'Copy short URL',
+
+        usageSaveTitle: 'Save & Restore',
+        usageSaveDownload: 'Download playlist as JSON file',
+        usageSaveImport: 'Load saved JSON file',
+        usageSaveHistory: 'View recent 10 playlists',
+
+        usageFeaturesTitle: 'Features',
+        usageFeatureShuffle: 'Play in random order',
+        usageFeatureRepeat: 'Toggle all/one/none',
+        usageFeatureFavorite: 'Star to save from history',
+
+        // History Modal
+        historyTitle: 'Playlist History',
+        historyFavorites: 'Favorites',
+        historyRecent: 'Recent',
+        historyEmpty: 'No history',
+        historyLoad: 'Load',
+        historyFavorite: 'Favorite',
+        historyDelete: 'Delete',
+
+        // Toast Messages
+        toastUrlCopied: 'URL copied!',
+        toastPlaylistSaved: 'Playlist downloaded',
+        toastPlaylistImported: 'tracks imported',
+        toastPlaylistCleared: 'Playlist cleared',
+        toastFavoriteAdded: 'Added to favorites',
+        toastFavoriteRemoved: 'Removed from favorites',
+        toastSharing: 'Sharing...',
+        toastGeneratingUrl: 'Generating short URL...',
+        toastLoading: 'Loading...',
+        toastUpdated: 'App updated',
+        toastInstalled: 'App installed!',
+
+        // Error Messages
+        errorEmpty: 'Playlist is empty',
+        errorInvalidJson: 'Please select a JSON file',
+        errorLoadFailed: 'Failed to load file',
+        errorPlaylistNotFound: 'Playlist not found',
+        errorOffline: 'Offline',
+
+        // Buttons
+        close: 'Close',
+        cancel: 'Cancel',
+        ok: 'OK',
+
+        // Language Selector
+        language: 'Language',
+        langJa: '日本語',
+        langEn: 'English',
+        langZh: '中文',
+        langKo: '한국어'
+    },
+
+    zh: {
+        // App Info
+        appName: 'SUNO 播放列表播放器',
+        appTitle: 'SUNO 播放列表',
+        appDescription: '连续播放SUNO音乐',
+
+        // Input Section
+        inputTitle: '添加链接',
+        inputPlaceholder: '粘贴SUNO歌曲链接（每行一首）或短链接（s.suno.ai/xxxxx）',
+        loadPlaylistBtn: '创建播放列表',
+
+        // Player Controls
+        previous: '上一首',
+        play: '播放',
+        pause: '暂停',
+        next: '下一首',
+        shuffle: '随机播放',
+        repeat: '重复',
+        none: '关闭',
+        all: '全部',
+        one: '单曲',
+
+        // Playlist
+        playlistTitle: '播放列表',
+        trackCount: '首',
+        emptyPlaylist: '播放列表为空',
+
+        // Actions
+        clear: '清空',
+        download: '下载',
+        import: '导入',
+        share: '分享',
+        history: '历史',
+        help: '帮助',
+
+        // Share Options
+        shareTwitter: '分享到 X (Twitter)',
+        shareLine: '分享到 LINE',
+        shareFacebook: '分享到 Facebook',
+        shareCopy: '复制链接',
+
+        // Help Modal
+        helpTitle: '帮助',
+        shortcutsTab: '快捷键',
+        usageTab: '使用指南',
+
+        // Keyboard Shortcuts
+        keySpace: 'Space',
+        keyN: 'N',
+        keyP: 'P',
+        keyLeft: '←',
+        keyRight: '→',
+        keyM: 'M',
+        actionPlay: '播放/暂停',
+        actionNext: '下一首',
+        actionPrev: '上一首',
+        actionSeekBack: '后退5秒',
+        actionSeekForward: '前进5秒',
+        actionMute: '静音',
+
+        // Usage Guide
+        usageCreateTitle: '如何创建播放列表',
+        usageCreateStep1: '粘贴SUNO链接（每行一首）',
+        usageCreateStep2: '点击"创建播放列表"按钮',
+        usageCreateStep3: '将自动加载歌曲信息',
+
+        usageShareTitle: '分享播放列表',
+        usageShareDesc: '从🔗按钮选择分享方式：',
+        usageShareTwitter: '通过推文分享',
+        usageShareLine: '通过LINE发送',
+        usageShareFacebook: '发布到Facebook',
+        usageShareUrl: '复制短链接',
+
+        usageSaveTitle: '保存与恢复',
+        usageSaveDownload: '将播放列表下载为JSON文件',
+        usageSaveImport: '加载已保存的JSON文件',
+        usageSaveHistory: '查看最近10个播放列表',
+
+        usageFeaturesTitle: '功能',
+        usageFeatureShuffle: '随机顺序播放',
+        usageFeatureRepeat: '切换全部/单曲/关闭',
+        usageFeatureFavorite: '从历史中加星收藏',
+
+        // History Modal
+        historyTitle: '播放列表历史',
+        historyFavorites: '收藏',
+        historyRecent: '最近',
+        historyEmpty: '无历史记录',
+        historyLoad: '加载',
+        historyFavorite: '收藏',
+        historyDelete: '删除',
+
+        // Toast Messages
+        toastUrlCopied: '链接已复制！',
+        toastPlaylistSaved: '播放列表已下载',
+        toastPlaylistImported: '首歌曲已导入',
+        toastPlaylistCleared: '播放列表已清空',
+        toastFavoriteAdded: '已添加到收藏',
+        toastFavoriteRemoved: '已从收藏中移除',
+        toastSharing: '分享中...',
+        toastGeneratingUrl: '生成短链接中...',
+        toastLoading: '加载中...',
+        toastUpdated: '应用已更新',
+        toastInstalled: '应用已安装！',
+
+        // Error Messages
+        errorEmpty: '播放列表为空',
+        errorInvalidJson: '请选择JSON文件',
+        errorLoadFailed: '文件加载失败',
+        errorPlaylistNotFound: '找不到播放列表',
+        errorOffline: '离线',
+
+        // Buttons
+        close: '关闭',
+        cancel: '取消',
+        ok: '确定',
+
+        // Language Selector
+        language: '语言',
+        langJa: '日本語',
+        langEn: 'English',
+        langZh: '中文',
+        langKo: '한국어'
+    },
+
+    ko: {
+        // App Info
+        appName: 'SUNO 재생목록 플레이어',
+        appTitle: 'SUNO 재생목록',
+        appDescription: 'SUNO 음악을 연속 재생',
+
+        // Input Section
+        inputTitle: '링크 추가',
+        inputPlaceholder: 'SUNO 노래 링크를 붙여넣기 (한 줄에 하나씩) 또는 단축 링크 (s.suno.ai/xxxxx)',
+        loadPlaylistBtn: '재생목록 만들기',
+
+        // Player Controls
+        previous: '이전',
+        play: '재생',
+        pause: '일시정지',
+        next: '다음',
+        shuffle: '셔플',
+        repeat: '반복',
+        none: '없음',
+        all: '전체',
+        one: '한 곡',
+
+        // Playlist
+        playlistTitle: '재생목록',
+        trackCount: '곡',
+        emptyPlaylist: '재생목록이 비어있습니다',
+
+        // Actions
+        clear: '지우기',
+        download: '다운로드',
+        import: '가져오기',
+        share: '공유',
+        history: '기록',
+        help: '도움말',
+
+        // Share Options
+        shareTwitter: 'X (Twitter)로 공유',
+        shareLine: 'LINE으로 공유',
+        shareFacebook: 'Facebook으로 공유',
+        shareCopy: 'URL 복사',
+
+        // Help Modal
+        helpTitle: '도움말',
+        shortcutsTab: '단축키',
+        usageTab: '사용 가이드',
+
+        // Keyboard Shortcuts
+        keySpace: 'Space',
+        keyN: 'N',
+        keyP: 'P',
+        keyLeft: '←',
+        keyRight: '→',
+        keyM: 'M',
+        actionPlay: '재생/일시정지',
+        actionNext: '다음 곡',
+        actionPrev: '이전 곡',
+        actionSeekBack: '5초 뒤로',
+        actionSeekForward: '5초 앞으로',
+        actionMute: '음소거',
+
+        // Usage Guide
+        usageCreateTitle: '재생목록 만드는 방법',
+        usageCreateStep1: 'SUNO 링크 붙여넣기 (한 줄에 하나씩)',
+        usageCreateStep2: '"재생목록 만들기" 버튼 클릭',
+        usageCreateStep3: '노래 정보가 자동으로 로드됩니다',
+
+        usageShareTitle: '재생목록 공유',
+        usageShareDesc: '🔗 버튼에서 공유 방법 선택:',
+        usageShareTwitter: '트윗으로 공유',
+        usageShareLine: 'LINE으로 전송',
+        usageShareFacebook: 'Facebook에 게시',
+        usageShareUrl: '단축 URL 복사',
+
+        usageSaveTitle: '저장 및 복원',
+        usageSaveDownload: '재생목록을 JSON 파일로 다운로드',
+        usageSaveImport: '저장된 JSON 파일 불러오기',
+        usageSaveHistory: '최근 재생목록 10개 보기',
+
+        usageFeaturesTitle: '기능',
+        usageFeatureShuffle: '무작위 순서로 재생',
+        usageFeatureRepeat: '전체/한 곡/없음 전환',
+        usageFeatureFavorite: '기록에서 별표로 저장',
+
+        // History Modal
+        historyTitle: '재생목록 기록',
+        historyFavorites: '즐겨찾기',
+        historyRecent: '최근',
+        historyEmpty: '기록이 없습니다',
+        historyLoad: '불러오기',
+        historyFavorite: '즐겨찾기',
+        historyDelete: '삭제',
+
+        // Toast Messages
+        toastUrlCopied: 'URL이 복사되었습니다!',
+        toastPlaylistSaved: '재생목록이 다운로드되었습니다',
+        toastPlaylistImported: '곡을 가져왔습니다',
+        toastPlaylistCleared: '재생목록이 지워졌습니다',
+        toastFavoriteAdded: '즐겨찾기에 추가',
+        toastFavoriteRemoved: '즐겨찾기에서 제거',
+        toastSharing: '공유 중...',
+        toastGeneratingUrl: '단축 URL 생성 중...',
+        toastLoading: '로딩 중...',
+        toastUpdated: '앱이 업데이트되었습니다',
+        toastInstalled: '앱이 설치되었습니다!',
+
+        // Error Messages
+        errorEmpty: '재생목록이 비어있습니다',
+        errorInvalidJson: 'JSON 파일을 선택해주세요',
+        errorLoadFailed: '파일 로드 실패',
+        errorPlaylistNotFound: '재생목록을 찾을 수 없습니다',
+        errorOffline: '오프라인',
+
+        // Buttons
+        close: '닫기',
+        cancel: '취소',
+        ok: '확인',
+
+        // Language Selector
+        language: '언어',
+        langJa: '日本語',
+        langEn: 'English',
+        langZh: '中文',
+        langKo: '한국어'
+    }
+};
+
+// Export for use in app.js
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = translations;
+}

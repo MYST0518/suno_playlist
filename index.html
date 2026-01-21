@@ -34,12 +34,15 @@
     <!-- LZ-String compression library for URL compression -->
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
 
+    <!-- Translations for i18n support -->
+    <script src="/translations.js"></script>
+
     <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
     <!-- Offline Banner -->
-    <div class="offline-banner" id="offlineBanner">
+    <div class="offline-banner" id="offlineBanner" data-i18n="errorOffline">
         ⚠️ オフラインです - インターネット接続を確認してください
     </div>
 
@@ -48,9 +51,30 @@
         <header class="header">
             <div class="logo">
                 <span class="logo-icon">🎵</span>
-                <h1>SUNO Playlist</h1>
+                <h1 data-i18n="appTitle">SUNO Playlist</h1>
             </div>
-            <p class="tagline">SUNOリンクをペーストして連続再生</p>
+            <p class="tagline" data-i18n="appDescription">SUNOリンクをペーストして連続再生</p>
+
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <button class="language-btn" id="languageBtn" title="Language / 言語">
+                    🌐
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <button class="language-option" data-lang="ja">
+                        🇯🇵 <span data-i18n="langJa">日本語</span>
+                    </button>
+                    <button class="language-option" data-lang="en">
+                        🇬🇧 <span data-i18n="langEn">English</span>
+                    </button>
+                    <button class="language-option" data-lang="zh">
+                        🇨🇳 <span data-i18n="langZh">中文</span>
+                    </button>
+                    <button class="language-option" data-lang="ko">
+                        🇰🇷 <span data-i18n="langKo">한국어</span>
+                    </button>
+                </div>
+            </div>
         </header>
 
         <!-- Loading Progress Indicator -->
