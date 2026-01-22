@@ -9,7 +9,7 @@ class I18nManager {
     constructor() {
         this.LANG_KEY = 'suno_language';
         this.translations = window.translations || {};
-                this.currentLang = this.detectLanguage(); // Then detect language
+        this.currentLang = this.detectLanguage(); // Then detect language
     }
 
     // Detect user's language
@@ -820,24 +820,36 @@ class SUNOPlaylist {
         try {
             const uuids = this.playlist.map(t => t.uuid);
 
+            // Try KV-based short URL first with timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
             const response = await fetch('/api/save-playlist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ uuids })
+                body: JSON.stringify({ uuids }),
+                signal: controller.signal
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
+            clearTimeout(timeoutId);
 
-            const data = await response.json();
-            return `${window.location.origin}/p/${data.id}`;
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Short URL generated:', data.id);
+                return `${window.location.origin}/p/${data.id}`;
+            } else {
+                console.warn('Short URL API failed with status:', response.status);
+                throw new Error(`API returned ${response.status}`);
+            }
         } catch (error) {
-            console.error('Failed to generate short URL:', error);
-            // Fallback to compressed URL if API fails
+            console.warn('Short URL generation failed, using compressed fallback:', error.message);
+
+            // Fallback to compressed URL
             const uuids = this.playlist.map(t => t.uuid).join(',');
             const compressed = LZString.compressToEncodedURIComponent(uuids);
-            return `${window.location.origin}${window.location.pathname}?p=${compressed}`;
+            const fallbackUrl = `${window.location.origin}${window.location.pathname}?p=${compressed}`;
+            console.log('Fallback URL:', fallbackUrl);
+            return fallbackUrl;
         }
     }
 
@@ -896,12 +908,18 @@ class SUNOPlaylist {
     async copyShareUrl() {
         if (this.playlist.length === 0) return;
 
-        this.showToast('短縮URL生成中...');
+        this.showToast('URL生成中...');
         const url = await this.getShareUrl();
+
+        // Check if it's a fallback URL
+        const isShortUrl = url.includes('/p/');
+        const successMessage = isShortUrl
+            ? 'URLをコピーしました！'
+            : 'URLをコピーしました（長いリンク）';
 
         try {
             await navigator.clipboard.writeText(url);
-            this.showToast('URLをコピーしました！');
+            this.showToast(successMessage);
         } catch (error) {
             prompt('共有URL:', url);
         }
