@@ -8,8 +8,8 @@
 class I18nManager {
     constructor() {
         this.LANG_KEY = 'suno_language';
-        this.currentLang = this.detectLanguage();
         this.translations = window.translations || {};
+                this.currentLang = this.detectLanguage(); // Then detect language
     }
 
     // Detect user's language
@@ -1669,3 +1669,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
