@@ -1,11 +1,8 @@
 <!DOCTYPE html>
-<html lang="ja">
-
-<head>
+<html lang="ja"><head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>SUNO Playlist Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>SUNO 播放列表播放器</title>
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
@@ -26,34 +23,30 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Outfit:wght@400;600;700&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&amp;family=Outfit:wght@400;600;700&amp;display=swap" rel="stylesheet">
 
     <!-- LZ-String compression library for URL compression -->
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
 
     <!-- Translations for i18n support -->
-    <script src="/translations.js"></script>
+    <script src="translations.js"></script>
 
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body class="">
     <!-- Offline Banner -->
-    <div class="offline-banner" id="offlineBanner" data-i18n="errorOffline">
-        ⚠️ オフラインです - インターネット接続を確認してください
-    </div>
+    <div class="offline-banner" id="offlineBanner" data-i18n="errorOffline">离线</div>
 
     <div class="app-container">
         <!-- Header -->
         <header class="header">
             <div class="logo">
                 <span class="logo-icon">🎵</span>
-                <h1 data-i18n="appTitle">SUNO Playlist</h1>
+                <h1 data-i18n="appTitle">SUNO 播放列表</h1>
             </div>
-            <p class="tagline" data-i18n="appDescription">SUNOリンクをペーストして連続再生</p>
+            <p class="tagline" data-i18n="appDescription">连续播放SUNO音乐</p>
 
             <!-- Language Selector -->
             <div class="language-selector">
@@ -90,13 +83,12 @@
             <!-- Input Section -->
             <section class="input-section">
                 <div class="input-header">
-                    
+                    <h2><span data-i18n="inputTitle">添加链接</span></h2>
                     <button id="loadBtn" class="btn btn-primary">
-                        <span>▶</span> プレイリスト作成
+                        <span>▶</span> <span data-i18n="loadPlaylistBtn">创建播放列表</span>
                     </button>
                 </div>
-                <textarea id="linksInput"
-                    placeholder="SUNOのリンクをペースト（1行に1曲）&#10;&#10;例:&#10;https://suno.com/s/eeWo6s0axFZ7PYG6&#10;https://suno.com/song/36b02f3a-1d01-434e-a0a8-8ee9aa7fd693"></textarea>
+                <textarea id="linksInput" data-i18n="inputPlaceholder" placeholder="粘贴SUNO歌曲链接（每行一首）或短链接（s.suno.ai/xxxxx）"></textarea>
             </section>
 
             <!-- Player Section -->
@@ -147,7 +139,7 @@
             <!-- Playlist Section -->
             <section class="playlist-section">
                 <div class="playlist-header">
-                    <h2>📜 プレイリスト</h2>
+                    <h2><span data-i18n="playlistTitle">播放列表</span></h2>
                     <div class="playlist-actions">
                         <button id="historyBtn" class="btn btn-secondary" title="履歴">
                             📜
@@ -164,7 +156,7 @@
                         </button>
                         <div class="share-container">
                             <button id="shareBtn" class="btn btn-share" title="プレイリストを共有">
-                                🔗 共有
+                                🔗 <span data-i18n="share">分享</span>
                             </button>
                             <div class="share-dropdown" id="shareDropdown">
                                 <button class="share-option" id="shareTwitter" title="X (Twitter)で共有">
@@ -211,12 +203,12 @@
         <!-- Help Modal -->
         <div class="help-modal" id="helpModal">
             <div class="help-content">
-                <h3>📖 ヘルプ</h3>
+                <h3 data-i18n="helpTitle">帮助</h3>
 
                 <!-- Tabs -->
                 <div class="help-tabs">
-                    <button class="help-tab active" data-tab="shortcuts">⌨️ ショートカット</button>
-                    <button class="help-tab" data-tab="usage">📝 使い方</button>
+                    <button class="help-tab active" data-tab="shortcuts"><span data-i18n="shortcutsTab">快捷键</span></button>
+                    <button class="help-tab" data-tab="usage"><span data-i18n="usageTab">使用指南</span></button>
                 </div>
 
                 <!-- Shortcuts Tab -->
@@ -292,7 +284,7 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary" id="closeHelpBtn">閉じる</button>
+                <button class="btn btn-primary" id="closeHelpBtn" data-i18n="close">关闭</button>
             </div>
         </div>
 
@@ -300,7 +292,7 @@
         <div class="history-modal" id="historyModal">
             <div class="history-content">
                 <div class="history-header">
-                    <h3>📜 プレイリスト履歴</h3>
+                    <h3 data-i18n="historyTitle">播放列表历史</h3>
                     <button class="btn-close" id="closeHistoryBtn">✕</button>
                 </div>
                 <div class="history-list" id="historyList">
@@ -310,8 +302,7 @@
         </div>
     </div>
 
-    <script src="/app.js"></script>
-</body>
+    <script src="app.js"></script>
 
 
-</html>
+</body></html>
