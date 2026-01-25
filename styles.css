@@ -1,11 +1,15 @@
 /* ===================================
    CSS Variables & Theme
    =================================== */
+
+/* Default Dark Theme */
 :root {
     --bg-primary: #0a0a0f;
     --bg-secondary: #12121a;
     --bg-tertiary: #1a1a25;
     --bg-card: linear-gradient(135deg, rgba(30, 30, 45, 0.9) 0%, rgba(20, 20, 35, 0.95) 100%);
+    --bg-overlay: radial-gradient(ellipse at center, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.06) 0%, transparent 40%);
 
     --accent-primary: #ff6b35;
     --accent-secondary: #7c3aed;
@@ -23,6 +27,16 @@
     --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.3);
     --shadow-glow: 0 0 30px rgba(255, 107, 53, 0.2);
 
+    /* Theme icons */
+    --icon-logo: '🎵';
+    --icon-play: '▶';
+    --icon-pause: '⏸';
+    --icon-shuffle: '🔀';
+    --icon-repeat: '🔁';
+    --icon-volume: '🔊';
+    --icon-mute: '🔇';
+
+    /* Spacing (theme-independent) */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
     --spacing-md: 1.5rem;
@@ -36,6 +50,127 @@
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
 }
+
+/* 🐱 Tabby Cat Theme */
+[data-theme="tabby"] {
+    --bg-primary: #fff9f0;
+    --bg-secondary: #ffefdb;
+    --bg-tertiary: #ffe4bc;
+    --bg-card: linear-gradient(135deg, rgba(255, 249, 240, 0.95) 0%, rgba(255, 228, 188, 0.98) 100%);
+    --bg-overlay: radial-gradient(ellipse at center, rgba(255, 140, 0, 0.1) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(255, 165, 0, 0.08) 0%, transparent 40%);
+
+    --accent-primary: #e67e22;
+    --accent-secondary: #f39c12;
+    --accent-tertiary: #d35400;
+    --accent-success: #27ae60;
+
+    --gradient-primary: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    --gradient-button: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+
+    --text-primary: #5d4037;
+    --text-secondary: #795548;
+    --text-muted: #a1887f;
+
+    --border-color: rgba(230, 126, 34, 0.2);
+    --shadow-soft: 0 4px 15px rgba(230, 126, 34, 0.15);
+    --shadow-glow: 0 0 25px rgba(230, 126, 34, 0.2);
+
+    /* Cat-themed icons */
+    --icon-logo: '🐱';
+    --icon-play: '🐾';
+    --icon-pause: '😼';
+    --icon-shuffle: '🐈';
+    --icon-repeat: '🔄';
+    --icon-volume: '😺';
+    --icon-mute: '😿';
+}
+
+[data-theme="tabby"] body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 20c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm10-5c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm10 5c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm-10 5c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z' fill='%23e67e22' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* 🐱 Tabby Cat Specific Styles */
+[data-theme="tabby"] .player-section,
+[data-theme="tabby"] .input-section,
+[data-theme="tabby"] .playlist-section {
+    position: relative;
+    border: 2px solid rgba(230, 126, 34, 0.4);
+    box-shadow: 0 8px 32px rgba(230, 126, 34, 0.2);
+}
+
+/* Cat Ears */
+[data-theme="tabby"] .player-section::before,
+[data-theme="tabby"] .player-section::after {
+    content: '';
+    position: absolute;
+    top: -16px;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-bottom: 24px solid var(--accent-primary);
+    z-index: 0;
+    filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.1));
+}
+
+[data-theme="tabby"] .player-section::before {
+    left: 15px;
+    transform: rotate(-15deg);
+}
+
+[data-theme="tabby"] .player-section::after {
+    right: 15px;
+    transform: rotate(15deg);
+}
+
+/* Animation for the cat theme */
+@keyframes tail-wag {
+
+    0%,
+    100% {
+        transform: rotate(0) scale(1);
+    }
+
+    50% {
+        transform: rotate(10deg) scale(1.1);
+    }
+}
+
+[data-theme="tabby"] .logo-icon {
+    display: inline-block;
+    animation: tail-wag 2.5s ease-in-out infinite;
+    cursor: pointer;
+}
+
+[data-theme="tabby"] .logo-icon:active {
+    transform: scale(0.9);
+}
+
+[data-theme="tabby"] .btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+[data-theme="tabby"] .btn-primary::after {
+    content: '🐾';
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    font-size: 1.2rem;
+    opacity: 0.15;
+    transform: rotate(15deg);
+}
+
+
 
 /* ===================================
    Base Styles
@@ -63,9 +198,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background:
-        radial-gradient(ellipse at center, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.06) 0%, transparent 40%);
+    background: var(--bg-overlay);
     pointer-events: none;
     z-index: 0;
 }
@@ -129,6 +262,103 @@ body::before {
 .tagline {
     color: var(--text-secondary);
     font-size: 0.9rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Header Controls */
+.header-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+/* Theme & Language Selector Shared Styles */
+.theme-selector,
+.language-selector {
+    position: relative;
+}
+
+.theme-btn,
+.language-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-btn:hover,
+.language-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-primary);
+}
+
+.theme-dropdown,
+.language-dropdown {
+    position: absolute;
+    top: calc(100% + var(--spacing-xs));
+    right: 0;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xs);
+    min-width: 160px;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: var(--transition-fast);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+}
+
+.theme-dropdown.show,
+.language-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.theme-option,
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    text-align: left;
+}
+
+.theme-option:hover,
+.language-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-option.active,
+.language-option.active {
+    background: rgba(255, 107, 53, 0.2);
+    color: var(--accent-primary);
+}
+
+.theme-icon {
+    font-size: 1.3rem;
 }
 
 /* ===================================
@@ -438,6 +668,12 @@ textarea::placeholder {
 
 .playlist-item.active .item-number {
     color: var(--accent-primary);
+}
+
+[data-theme="tabby"] .playlist-item.active::after {
+    content: '🐾';
+    font-size: 0.8rem;
+    margin-left: auto;
 }
 
 .item-info {
@@ -1480,7 +1716,9 @@ body {
     .browser-only {
         display: none !important;
     }
-}/* PWA Standalone Mode Specific */
+}
+
+/* PWA Standalone Mode Specific */
 @media all and (display-mode: standalone) {
 
     /* Adjust for PWA fullscreen */

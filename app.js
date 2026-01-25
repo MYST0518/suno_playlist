@@ -8,7 +8,7 @@
 class I18nManager {
     constructor() {
         this.LANG_KEY = 'suno_language';
-        this.translations = window.translations || {};
+        this.translations = window.translations || {}; // Access from window object
         this.currentLang = this.detectLanguage(); // Then detect language
     }
 
@@ -80,6 +80,119 @@ class I18nManager {
         return this.currentLang;
     }
 }
+
+// ===================================
+//    Theme Manager
+// ===================================
+class ThemeManager {
+    constructor() {
+        this.THEME_KEY = 'suno_theme';
+        this.currentTheme = this.detectTheme();
+
+        // Icon mapping for different themes
+        this.icons = {
+            default: {
+                logo: '🎵',
+                play: '▶',
+                pause: '⏸',
+                shuffle: '🔀',
+                previous: '⏮',
+                next: '⏭',
+                repeat: '🔁',
+                repeatOne: '🔂',
+                volume: '🔊',
+                mute: '🔇'
+            },
+            tabby: {
+                logo: '🐈',
+                play: '🐾',
+                pause: '😼',
+                shuffle: '🐈',
+                previous: '⏮',
+                next: '⏭',
+                repeat: '🔄',
+                repeatOne: '🐱',
+                volume: '😺',
+                mute: '😿'
+            }
+        };
+    }
+
+    // Detect user's theme preference
+    detectTheme() {
+        // Priority: LocalStorage > Default (default)
+        const stored = localStorage.getItem(this.THEME_KEY);
+        if (stored && (stored === 'default' || stored === 'tabby')) {
+            return stored;
+        }
+        return 'default';
+    }
+
+    // Set theme
+    setTheme(theme) {
+        if (theme !== 'default' && theme !== 'tabby') {
+            console.error(`Theme ${theme} not supported`);
+            return;
+        }
+
+        this.currentTheme = theme;
+        localStorage.setItem(this.THEME_KEY, theme);
+        this.applyTheme();
+    }
+
+    // Apply theme to DOM
+    applyTheme() {
+        const html = document.documentElement;
+
+        if (this.currentTheme === 'tabby') {
+            html.setAttribute('data-theme', 'tabby');
+        } else {
+            html.removeAttribute('data-theme');
+        }
+
+        // Update theme-specific icons
+        this.updateThemeIcons();
+
+        // Dispatch event for custom updates
+        window.dispatchEvent(new CustomEvent('themeChanged', {
+            detail: { theme: this.currentTheme }
+        }));
+    }
+
+    // Get icon based on current theme
+    getIcon(name) {
+        const themeIcons = this.icons[this.currentTheme] || this.icons.default;
+        return themeIcons[name] || this.icons.default[name];
+    }
+
+    // Update icons based on theme
+    updateThemeIcons() {
+        // Update logo
+        const logoIcon = document.querySelector('.logo-icon');
+        if (logoIcon) logoIcon.textContent = this.getIcon('logo');
+
+        // Update control buttons (that aren't dynamically changed by state)
+        const prevBtn = document.querySelector('#prevBtn span');
+        if (prevBtn) prevBtn.textContent = this.getIcon('previous');
+
+        const nextBtn = document.querySelector('#nextBtn span');
+        if (nextBtn) nextBtn.textContent = this.getIcon('next');
+
+        // Note: Play/Pause/Shuffle/Repeat are managed by SUNOPlaylist class
+        // but it will now use getIcon() thanks to the update.
+    }
+
+    // Get current theme
+    getCurrentTheme() {
+        return this.currentTheme;
+    }
+
+    // Initialize theme on page load
+    init() {
+        this.applyTheme();
+    }
+}
+
 
 // Playlist Storage Manager
 class PlaylistStorage {
@@ -368,6 +481,9 @@ class SUNOPlaylist {
         this.elements.audioPlayer.addEventListener('loadedmetadata', () => this.updateDuration());
         this.elements.audioPlayer.addEventListener('error', (e) => this.handleError(e));
 
+        // Listen for theme changes to update icons
+        window.addEventListener('themeChanged', () => this.updateControlIcons());
+
         // Set initial volume
         this.elements.audioPlayer.volume = 0.8;
 
@@ -396,13 +512,13 @@ class SUNOPlaylist {
     // Setup offline detection
     setupOfflineDetection() {
         window.addEventListener('online', () => {
-            this.showToast('オンラインに復帰しました', 'success');
+            this.showToast(window.i18n.t('onlineMessage'), 'success');
             this.isOffline = false;
             this.elements.offlineBanner.classList.remove('show');
         });
 
         window.addEventListener('offline', () => {
-            this.showToast('オフラインです', 'error');
+            this.showToast(window.i18n.t('offlineMessage'), 'error');
             this.isOffline = true;
             this.elements.offlineBanner.classList.add('show');
         });
@@ -507,7 +623,7 @@ class SUNOPlaylist {
 
     // Load playlist from short URL (KV-based)
     async loadFromShortUrl(shortId) {
-        this.showToast('プレイリストを読み込み中...');
+        this.showToast(window.i18n.t('toastLoading'));
 
         try {
             const response = await fetch(`/api/get-playlist?id=${shortId}`);
@@ -643,52 +759,52 @@ class SUNOPlaylist {
     // Get user-friendly error message
     getErrorMessage(error, context) {
         if (!navigator.onLine || this.isOffline) {
-            return 'インターネット接続がありません';
+            return window.i18n.t('errorOffline');
         }
 
         const errorStr = error.toString();
 
         if (error.name === 'AbortError' || errorStr.includes('aborted')) {
-            return `${context}: タイムアウト`;
+            return `${context}: ${window.i18n.t('metaTimeout')}`;
         }
 
         if (errorStr.includes('HTTP 404') || errorStr.includes('404')) {
-            return `${context}: トラックが見つかりません`;
+            return `${context}: ${window.i18n.t('metaNotFound')}`;
         }
 
         if (errorStr.includes('HTTP 403')) {
-            return `${context}: アクセスが拒否されました`;
+            return `${context}: Access Denied`;
         }
 
         if (errorStr.includes('HTTP 5') || errorStr.includes('500')) {
-            return `${context}: サーバーエラー`;
+            return `${context}: Server Error`;
         }
 
         if (errorStr.includes('Timeout')) {
-            return `${context}: タイムアウト`;
+            return `${context}: ${window.i18n.t('metaTimeout')}`;
         }
 
         if (errorStr.includes('fetch') || errorStr.includes('network')) {
-            return `${context}: ネットワークエラー`;
+            return `${context}: ${window.i18n.t('metaNoNetwork')}`;
         }
 
-        return `${context}: エラー`;
+        return `${context}: Error`;
     }
 
     // Load playlist from input
     async loadPlaylist() {
         const text = this.elements.linksInput.value.trim();
         if (!text) {
-            this.showToast('リンクを入力してください', 'warning');
+            this.showToast(window.i18n.t('errorEmpty'), 'warning');
             return;
         }
 
         if (this.isOffline) {
-            this.showToast('オフラインです。インターネット接続を確認してください', 'error');
+            this.showToast(window.i18n.t('errorOffline'), 'error');
             return;
         }
 
-        this.showToast('読み込み中...');
+        this.showToast(window.i18n.t('toastLoading'));
         this.showLoadingProgress(true);
 
         const lines = text.split('\n').map(l => l.trim()).filter(l => l);
@@ -703,7 +819,7 @@ class SUNOPlaylist {
             if (!uuid && line.includes('/s/')) {
                 const shortMatch = line.match(/\/s\/([a-zA-Z0-9]+)/);
                 if (shortMatch) {
-                    this.updateProgressBar(i, lines.length, '短縮リンクを解決中...');
+                    this.updateProgressBar(i, lines.length, window.i18n.t('metaResolving'));
                     uuid = await this.resolveShortLink(shortMatch[1]);
                     if (!uuid) {
                         console.warn('Failed to resolve short link:', line);
@@ -716,7 +832,7 @@ class SUNOPlaylist {
                     uuid: uuid,
                     mp3Url: `https://cdn1.suno.ai/${uuid}.mp3`,
                     title: `Track ${this.playlist.length + 1}`,
-                    artist: 'Loading...',
+                    artist: window.i18n.t('toastLoading'),
                     shortId: uuid.slice(0, 8),
                     error: null
                 });
@@ -820,36 +936,24 @@ class SUNOPlaylist {
         try {
             const uuids = this.playlist.map(t => t.uuid);
 
-            // Try KV-based short URL first with timeout
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
-
             const response = await fetch('/api/save-playlist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ uuids }),
-                signal: controller.signal
+                body: JSON.stringify({ uuids })
             });
 
-            clearTimeout(timeoutId);
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Short URL generated:', data.id);
-                return `${window.location.origin}/p/${data.id}`;
-            } else {
-                console.warn('Short URL API failed with status:', response.status);
-                throw new Error(`API returned ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
             }
-        } catch (error) {
-            console.warn('Short URL generation failed, using compressed fallback:', error.message);
 
-            // Fallback to compressed URL
+            const data = await response.json();
+            return `${window.location.origin}/p/${data.id}`;
+        } catch (error) {
+            console.error('Failed to generate short URL:', error);
+            // Fallback to compressed URL if API fails
             const uuids = this.playlist.map(t => t.uuid).join(',');
             const compressed = LZString.compressToEncodedURIComponent(uuids);
-            const fallbackUrl = `${window.location.origin}${window.location.pathname}?p=${compressed}`;
-            console.log('Fallback URL:', fallbackUrl);
-            return fallbackUrl;
+            return `${window.location.origin}${window.location.pathname}?p=${compressed}`;
         }
     }
 
@@ -908,18 +1012,12 @@ class SUNOPlaylist {
     async copyShareUrl() {
         if (this.playlist.length === 0) return;
 
-        this.showToast('URL生成中...');
+        this.showToast('短縮URL生成中...');
         const url = await this.getShareUrl();
-
-        // Check if it's a fallback URL
-        const isShortUrl = url.includes('/p/');
-        const successMessage = isShortUrl
-            ? 'URLをコピーしました！'
-            : 'URLをコピーしました（長いリンク）';
 
         try {
             await navigator.clipboard.writeText(url);
-            this.showToast(successMessage);
+            this.showToast('URLをコピーしました！');
         } catch (error) {
             prompt('共有URL:', url);
         }
@@ -1013,6 +1111,30 @@ class SUNOPlaylist {
         }
     }
 
+    // Update all control icons based on current theme/state
+    updateControlIcons() {
+        if (!window.themeManager) return;
+
+        this.elements.playIcon.textContent = this.isPlaying ?
+            window.themeManager.getIcon('pause') :
+            window.themeManager.getIcon('play');
+
+        this.elements.shuffleIcon.textContent = window.themeManager.getIcon('shuffle');
+
+        this.elements.repeatIcon.textContent = this.repeatMode === 'one' ?
+            window.themeManager.getIcon('repeatOne') :
+            window.themeManager.getIcon('repeat');
+
+        const volumeIcon = document.querySelector('.volume-icon');
+        if (volumeIcon) {
+            volumeIcon.textContent = this.elements.audioPlayer.muted ?
+                window.themeManager.getIcon('mute') :
+                window.themeManager.getIcon('volume');
+        }
+
+        this.updateNowPlaying();
+    }
+
     // Play/Pause toggle
     togglePlay() {
         if (this.isPlaying) {
@@ -1032,7 +1154,8 @@ class SUNOPlaylist {
         this.elements.audioPlayer.play()
             .then(() => {
                 this.isPlaying = true;
-                this.elements.playIcon.textContent = '⏸';
+                this.elements.playIcon.textContent = window.themeManager.getIcon('pause');
+                this.updateNowPlaying();
             })
             .catch(error => {
                 console.error('Playback failed:', error);
@@ -1044,7 +1167,8 @@ class SUNOPlaylist {
     pause() {
         this.elements.audioPlayer.pause();
         this.isPlaying = false;
-        this.elements.playIcon.textContent = '▶';
+        this.elements.playIcon.textContent = window.themeManager.getIcon('play');
+        this.updateNowPlaying();
     }
 
     // Play next track
@@ -1102,8 +1226,13 @@ class SUNOPlaylist {
     // Toggle mute
     toggleMute() {
         this.elements.audioPlayer.muted = !this.elements.audioPlayer.muted;
-        const icon = this.elements.audioPlayer.muted ? '🔇' : '🔊';
-        document.querySelector('.volume-icon').textContent = icon;
+        const icon = this.elements.audioPlayer.muted ?
+            window.themeManager.getIcon('mute') :
+            window.themeManager.getIcon('volume');
+
+        const volumeIcon = document.querySelector('.volume-icon');
+        if (volumeIcon) volumeIcon.textContent = icon;
+
         this.showToast(this.elements.audioPlayer.muted ? 'ミュート' : 'ミュート解除');
     }
 
@@ -1122,6 +1251,8 @@ class SUNOPlaylist {
             this.currentIndex = 0;
             this.renderPlaylist();
             this.loadTrack(0);
+            this.updateShuffleButton();
+            this.elements.shuffleIcon.textContent = window.themeManager.getIcon('shuffle');
             this.showToast('シャッフルオン', 'success');
         } else {
             // Restore original order
@@ -1129,6 +1260,8 @@ class SUNOPlaylist {
             this.currentIndex = 0;
             this.renderPlaylist();
             this.loadTrack(0);
+            this.updateShuffleButton();
+            this.elements.shuffleIcon.textContent = window.themeManager.getIcon('shuffle');
             this.showToast('シャッフルオフ', 'success');
         }
 
@@ -1151,9 +1284,9 @@ class SUNOPlaylist {
         this.repeatMode = modes[(currentIdx + 1) % modes.length];
 
         const messages = {
-            'none': 'リピートオフ',
-            'all': '全曲リピート',
-            'one': '1曲リピート'
+            'none': window.i18n.t('repeatNone'),
+            'all': window.i18n.t('repeatAll'),
+            'one': window.i18n.t('repeatOne')
         };
 
         const icons = {
@@ -1162,7 +1295,10 @@ class SUNOPlaylist {
             'one': '🔂'
         };
 
-        this.elements.repeatIcon.textContent = icons[this.repeatMode];
+        this.elements.repeatIcon.textContent = this.repeatMode === 'one' ?
+            window.themeManager.getIcon('repeatOne') :
+            window.themeManager.getIcon('repeat');
+
         this.showToast(messages[this.repeatMode], 'success');
         this.updateRepeatButton();
     }
@@ -1180,7 +1316,7 @@ class SUNOPlaylist {
     clearPlaylist() {
         if (this.playlist.length === 0) return;
 
-        if (confirm('プレイリストをクリアしますか？')) {
+        if (confirm(window.i18n.t('confirmClear'))) {
             this.playlist = [];
             this.originalPlaylist = [];
             this.loadingStates.clear();
@@ -1189,12 +1325,12 @@ class SUNOPlaylist {
             this.repeatMode = 'none';
             this.pause();
             this.elements.audioPlayer.src = '';
-            this.elements.trackTitle.textContent = '準備完了';
-            this.elements.trackArtist.textContent = 'リンクを入力してください';
+            this.elements.trackTitle.textContent = window.i18n.t('appName');
+            this.elements.trackArtist.textContent = window.i18n.t('inputPlaceholder');
             this.renderPlaylist();
             this.updateShuffleButton();
             this.updateRepeatButton();
-            this.showToast('プレイリストをクリアしました', 'success');
+            this.showToast(window.i18n.t('toastPlaylistCleared'), 'success');
         }
     }
 
@@ -1212,7 +1348,7 @@ class SUNOPlaylist {
         event.target.value = '';
 
         if (!file.name.endsWith('.json')) {
-            this.showToast('JSONファイルを選択してください', 'error');
+            this.showToast(window.i18n.t('errorInvalidJson'), 'error');
             return;
         }
 
@@ -1226,7 +1362,7 @@ class SUNOPlaylist {
             }
 
             if (data.tracks.length === 0) {
-                this.showToast('プレイリストが空です', 'warning');
+                this.showToast(window.i18n.t('errorEmpty'), 'warning');
                 return;
             }
 
@@ -1234,7 +1370,7 @@ class SUNOPlaylist {
             const validTracks = data.tracks.filter(t => t.uuid || t.url);
 
             if (validTracks.length === 0) {
-                throw new Error('有効な曲が見つかりません');
+                throw new Error(window.i18n.t('metaNotFound'));
             }
 
             // Convert tracks to URLs
@@ -1248,21 +1384,21 @@ class SUNOPlaylist {
 
             // Load the playlist
             this.elements.linksInput.value = urls.join('\n');
-            this.showToast(`${validTracks.length}曲をインポートしました`, 'success');
+            this.showToast(`${validTracks.length} ${window.i18n.t('toastPlaylistImported')}`, 'success');
 
             // Auto-load the playlist
             setTimeout(() => this.loadPlaylist(), 500);
 
         } catch (error) {
             console.error('Import error:', error);
-            this.showToast('ファイルの読み込みに失敗しました', 'error');
+            this.showToast(window.i18n.t('errorLoadFailed'), 'error');
         }
     }
 
     // Download playlist
     downloadPlaylist() {
         if (this.playlist.length === 0) {
-            this.showToast('プレイリストが空です', 'warning');
+            this.showToast(window.i18n.t('errorEmpty'), 'warning');
             return;
         }
 
@@ -1285,7 +1421,7 @@ class SUNOPlaylist {
         a.click();
         URL.revokeObjectURL(url);
 
-        this.showToast('プレイリストをダウンロードしました', 'success');
+        this.showToast(window.i18n.t('toastPlaylistSaved'), 'success');
     }
 
     // Toggle help modal
@@ -1637,16 +1773,66 @@ window.installPWA = async () => {
 };
 
 // ===================================
-//    I18n Initialization
+//    Theme & I18n Initialization
 // ===================================
 
-// Initialize i18n
-window.i18n = new I18nManager();
-
-// Apply initial translations on page load
+// Apply initial translations and theme on page load
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize i18n
+    // Initialize Theme Manager
+    window.themeManager = new ThemeManager();
+    window.themeManager.init();
+
+    // Initialize i18n AFTER translations.js has loaded
+    window.i18n = new I18nManager();
     window.i18n.updateDOM();
+
+    // Theme selector event listeners
+    const themeBtn = document.getElementById('themeBtn');
+    const themeDropdown = document.getElementById('themeDropdown');
+
+    if (themeBtn && themeDropdown) {
+        // Toggle dropdown
+        themeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            themeDropdown.classList.toggle('show');
+            // Close language dropdown
+            const languageDropdown = document.getElementById('languageDropdown');
+            if (languageDropdown) {
+                languageDropdown.classList.remove('show');
+            }
+        });
+
+        // Theme option click
+        document.querySelectorAll('.theme-option').forEach(option => {
+            const theme = option.getAttribute('data-theme');
+
+            // Mark current theme as active
+            if (theme === window.themeManager.getCurrentTheme()) {
+                option.classList.add('active');
+            }
+
+            option.addEventListener('click', () => {
+                window.themeManager.setTheme(theme);
+
+                // Update active states
+                document.querySelectorAll('.theme-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                option.classList.add('active');
+
+                themeDropdown.classList.remove('show');
+
+                // Show toast
+                if (window.sunoPlaylist) {
+                    const themeNames = {
+                        default: window.i18n.t('themeDefault'),
+                        tabby: window.i18n.t('themeTabby')
+                    };
+                    window.sunoPlaylist.showToast(themeNames[theme] || theme, 'success');
+                }
+            });
+        });
+    }
 
     // Language selector event listeners
     const languageBtn = document.getElementById('languageBtn');
@@ -1657,20 +1843,40 @@ document.addEventListener('DOMContentLoaded', () => {
         languageBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             languageDropdown.classList.toggle('show');
+            // Close theme dropdown
+            if (themeDropdown) {
+                themeDropdown.classList.remove('show');
+            }
         });
 
-        // Close dropdown when clicking outside
+        // Close dropdowns when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.language-selector')) {
                 languageDropdown.classList.remove('show');
             }
+            if (!e.target.closest('.theme-selector') && themeDropdown) {
+                themeDropdown.classList.remove('show');
+            }
         });
 
-        // Language option click
+        // Language option click  
         document.querySelectorAll('.language-option').forEach(option => {
+            const lang = option.getAttribute('data-lang');
+
+            // Mark current language as active
+            if (lang === window.i18n.getCurrentLanguage()) {
+                option.classList.add('active');
+            }
+
             option.addEventListener('click', (e) => {
-                const lang = option.getAttribute('data-lang');
                 window.i18n.setLanguage(lang);
+
+                // Update active states
+                document.querySelectorAll('.language-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                option.classList.add('active');
+
                 languageDropdown.classList.remove('show');
 
                 // Show toast
@@ -1681,10 +1887,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         zh: '中文',
                         ko: '한국어'
                     };
-                    window.sunoPlaylist.showToast(`${langNames[lang]}`, 'success');
+                    window.sunoPlaylist.showToast(langNames[lang], 'success');
                 }
             });
         });
     }
 });
-

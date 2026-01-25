@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="ja"><head>
+<html lang="ja">
+
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>SUNO 播放列表播放器</title>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>SUNO Playlist Player</title>
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
@@ -23,49 +26,69 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&amp;family=Outfit:wght@400;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- LZ-String compression library for URL compression -->
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
 
-    <!-- Translations for i18n support -->
-    <script src="translations.js"></script>
-
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="">
+<body>
     <!-- Offline Banner -->
-    <div class="offline-banner" id="offlineBanner" data-i18n="errorOffline">离线</div>
+    <div class="offline-banner" id="offlineBanner" data-i18n="errorOffline">
+        ⚠️ オフラインです - インターネット接続を確認してください
+    </div>
 
     <div class="app-container">
         <!-- Header -->
         <header class="header">
             <div class="logo">
                 <span class="logo-icon">🎵</span>
-                <h1 data-i18n="appTitle">SUNO 播放列表</h1>
+                <h1 data-i18n="appTitle">SUNO Playlist</h1>
             </div>
-            <p class="tagline" data-i18n="appDescription">连续播放SUNO音乐</p>
+            <p class="tagline" data-i18n="appDescription">SUNOリンクをペーストして連続再生</p>
 
-            <!-- Language Selector -->
-            <div class="language-selector">
-                <button class="language-btn" id="languageBtn" title="Language / 言語">
-                    🌐
-                </button>
-                <div class="language-dropdown" id="languageDropdown">
-                    <button class="language-option" data-lang="ja">
-                        🇯🇵 <span data-i18n="langJa">日本語</span>
+            <div class="header-controls">
+                <!-- Theme Selector -->
+                <div class="theme-selector">
+                    <button class="theme-btn" id="themeBtn" title="Theme / テーマ">
+                        🎨
                     </button>
-                    <button class="language-option" data-lang="en">
-                        🇬🇧 <span data-i18n="langEn">English</span>
+                    <div class="theme-dropdown" id="themeDropdown">
+                        <button class="theme-option" data-theme="default">
+                            <span class="theme-icon">🎵</span>
+                            <span data-i18n="themeDefault">デフォルト</span>
+                        </button>
+                        <button class="theme-option" data-theme="tabby">
+                            <span class="theme-icon">🐱</span>
+                            <span data-i18n="themeTabby">茶トラ猫</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Language Selector -->
+                <div class="language-selector">
+                    <button class="language-btn" id="languageBtn" title="Language / 言語">
+                        🌐
                     </button>
-                    <button class="language-option" data-lang="zh">
-                        🇨🇳 <span data-i18n="langZh">中文</span>
-                    </button>
-                    <button class="language-option" data-lang="ko">
-                        🇰🇷 <span data-i18n="langKo">한국어</span>
-                    </button>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <button class="language-option" data-lang="ja">
+                            🇯🇵 <span data-i18n="langJa">日本語</span>
+                        </button>
+                        <button class="language-option" data-lang="en">
+                            🇬🇧 <span data-i18n="langEn">English</span>
+                        </button>
+                        <button class="language-option" data-lang="zh">
+                            🇨🇳 <span data-i18n="langZh">中文</span>
+                        </button>
+                        <button class="language-option" data-lang="ko">
+                            🇰🇷 <span data-i18n="langKo">한국어</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -83,12 +106,13 @@
             <!-- Input Section -->
             <section class="input-section">
                 <div class="input-header">
-                    <h2><span data-i18n="inputTitle">添加链接</span></h2>
+                    <h2><span data-i18n="inputTitle">📋 リンク入力</span></h2>
                     <button id="loadBtn" class="btn btn-primary">
-                        <span>▶</span> <span data-i18n="loadPlaylistBtn">创建播放列表</span>
+                        <span>▶</span> <span data-i18n="loadPlaylistBtn">プレイリスト作成</span>
                     </button>
                 </div>
-                <textarea id="linksInput" data-i18n="inputPlaceholder" placeholder="粘贴SUNO歌曲链接（每行一首）或短链接（s.suno.ai/xxxxx）"></textarea>
+                <textarea id="linksInput" data-i18n="inputPlaceholder"
+                    placeholder="SUNOのリンクをペースト（1行に1曲）&#10;&#10;例:&#10;https://suno.com/s/eeWo6s0axFZ7PYG6&#10;https://suno.com/song/36b02f3a-1d01-434e-a0a8-8ee9aa7fd693"></textarea>
             </section>
 
             <!-- Player Section -->
@@ -139,7 +163,7 @@
             <!-- Playlist Section -->
             <section class="playlist-section">
                 <div class="playlist-header">
-                    <h2><span data-i18n="playlistTitle">播放列表</span></h2>
+                    <h2><span data-i18n="playlistTitle">📜 プレイリスト</span></h2>
                     <div class="playlist-actions">
                         <button id="historyBtn" class="btn btn-secondary" title="履歴">
                             📜
@@ -156,7 +180,7 @@
                         </button>
                         <div class="share-container">
                             <button id="shareBtn" class="btn btn-share" title="プレイリストを共有">
-                                🔗 <span data-i18n="share">分享</span>
+                                🔗 <span data-i18n="share">共有</span>
                             </button>
                             <div class="share-dropdown" id="shareDropdown">
                                 <button class="share-option" id="shareTwitter" title="X (Twitter)で共有">
@@ -203,88 +227,92 @@
         <!-- Help Modal -->
         <div class="help-modal" id="helpModal">
             <div class="help-content">
-                <h3 data-i18n="helpTitle">帮助</h3>
+                <h3 data-i18n="helpTitle">📖 ヘルプ</h3>
 
                 <!-- Tabs -->
                 <div class="help-tabs">
-                    <button class="help-tab active" data-tab="shortcuts"><span data-i18n="shortcutsTab">快捷键</span></button>
-                    <button class="help-tab" data-tab="usage"><span data-i18n="usageTab">使用指南</span></button>
+                    <button class="help-tab active" data-tab="shortcuts"><span data-i18n="shortcutsTab">⌨️
+                            ショートカット</span></button>
+                    <button class="help-tab" data-tab="usage"><span data-i18n="usageTab">📝 使い方</span></button>
                 </div>
 
                 <!-- Shortcuts Tab -->
                 <div class="help-tab-content active" id="shortcutsTab">
                     <div class="shortcut-list">
                         <div class="shortcut-item">
-                            <kbd>Space</kbd>
-                            <span>再生/停止</span>
+                            <kbd data-i18n="keySpace">Space</kbd>
+                            <span data-i18n="actionPlay">再生/停止</span>
                         </div>
                         <div class="shortcut-item">
-                            <kbd>N</kbd>
-                            <span>次の曲</span>
+                            <kbd data-i18n="keyN">N</kbd>
+                            <span data-i18n="actionNext">次の曲</span>
                         </div>
                         <div class="shortcut-item">
-                            <kbd>P</kbd>
-                            <span>前の曲</span>
+                            <kbd data-i18n="keyP">P</kbd>
+                            <span data-i18n="actionPrev">前の曲</span>
                         </div>
                         <div class="shortcut-item">
-                            <kbd>←</kbd>
-                            <span>5秒戻る</span>
+                            <kbd data-i18n="keyLeft">←</kbd>
+                            <span data-i18n="actionSeekBack">5秒戻る</span>
                         </div>
                         <div class="shortcut-item">
-                            <kbd>→</kbd>
-                            <span>5秒進む</span>
+                            <kbd data-i18n="keyRight">→</kbd>
+                            <span data-i18n="actionSeekForward">5秒進む</span>
                         </div>
                         <div class="shortcut-item">
-                            <kbd>M</kbd>
-                            <span>ミュート</span>
+                            <kbd data-i18n="keyM">M</kbd>
+                            <span data-i18n="actionMute">ミュート</span>
                         </div>
                     </div>
                 </div>
-
                 <!-- Usage Tab -->
                 <div class="help-tab-content" id="usageTab">
                     <div class="usage-guide">
                         <div class="usage-section">
-                            <h4>🎵 プレイリストの作り方</h4>
+                            <h4 data-i18n="usageCreateTitle">🎵 プレイリストの作り方</h4>
                             <ol>
-                                <li>SUNOのリンクを入力欄にペースト（1行に1曲）</li>
-                                <li>「プレイリスト作成」ボタンをクリック</li>
-                                <li>自動的にタイトルとアーティスト名を取得します</li>
+                                <li data-i18n="usageCreateStep1">SUNOのリンクを入力欄にペースト（1行に1曲）</li>
+                                <li data-i18n="usageCreateStep2">「プレイリスト作成」ボタンをクリック</li>
+                                <li data-i18n="usageCreateStep3">自動的にタイトルとアーティスト名を取得します</li>
                             </ol>
                         </div>
 
                         <div class="usage-section">
-                            <h4>🔗 共有する</h4>
-                            <p>🔗ボタンから共有方法を選択：</p>
+                            <h4 data-i18n="usageShareTitle">🔗 共有する</h4>
+                            <p data-i18n="usageShareDesc">🔗ボタンから共有方法を選択：</p>
                             <ul>
-                                <li><strong>X (Twitter)</strong>: ツイートで共有</li>
-                                <li><strong>LINE</strong>: LINEで送信</li>
-                                <li><strong>Facebook</strong>: Facebookに投稿</li>
-                                <li><strong>URLコピー</strong>: 短縮URLをコピー</li>
+                                <li><strong data-i18n="shareTwitter">X (Twitter)</strong>: <span
+                                        data-i18n="usageShareTwitter">ツイートで共有</span></li>
+                                <li><strong data-i18n="shareLine">LINE</strong>: <span
+                                        data-i18n="usageShareLine">LINEで送信</span></li>
+                                <li><strong data-i18n="shareFacebook">Facebook</strong>: <span
+                                        data-i18n="usageShareFacebook">Facebookに投稿</span></li>
+                                <li><strong data-i18n="shareCopy">URLコピー</strong>: <span
+                                        data-i18n="usageShareUrl">短縮URLをコピー</span></li>
                             </ul>
                         </div>
 
                         <div class="usage-section">
-                            <h4>💾 保存と復元</h4>
+                            <h4 data-i18n="usageSaveTitle">💾 保存と復元</h4>
                             <ul>
-                                <li><strong>💾ダウンロード</strong>: プレイリストをJSONファイルで保存</li>
-                                <li><strong>📥インポート</strong>: 保存したJSONファイルを読み込み</li>
-                                <li><strong>📜履歴</strong>: 最近のプレイリスト10件を表示</li>
+                                <li data-i18n="usageSaveDownload"><strong>💾ダウンロード</strong>: プレイリストをJSONファイルで保存</li>
+                                <li data-i18n="usageSaveImport"><strong>📥インポート</strong>: 保存したJSONファイルを読み込み</li>
+                                <li data-i18n="usageSaveHistory"><strong>📜履歴</strong>: 最近のプレイリスト10件を表示</li>
                             </ul>
                         </div>
 
                         <div class="usage-section">
-                            <h4>🎮 便利な機能</h4>
+                            <h4 data-i18n="usageFeaturesTitle">🎮 便利な機能</h4>
                             <ul>
-                                <li><strong>🔀シャッフル</strong>: ランダム順で再生</li>
-                                <li><strong>🔁リピート</strong>: 全曲/1曲/なし を切替</li>
-                                <li><strong>⭐お気に入り</strong>: 履歴から星マークで保存</li>
+                                <li data-i18n="usageFeatureShuffle"><strong>🔀シャッフル</strong>: ランダム順で再生</li>
+                                <li data-i18n="usageFeatureRepeat"><strong>🔁リピート</strong>: 全曲/1曲/なし を切替</li>
+                                <li data-i18n="usageFeatureFavorite"><strong>⭐お気に入り</strong>: 履歴から星マークで保存</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <button class="btn btn-primary" id="closeHelpBtn" data-i18n="close">关闭</button>
+                <button class="btn btn-primary" id="closeHelpBtn" data-i18n="close">閉じる</button>
             </div>
         </div>
 
@@ -292,7 +320,7 @@
         <div class="history-modal" id="historyModal">
             <div class="history-content">
                 <div class="history-header">
-                    <h3 data-i18n="historyTitle">播放列表历史</h3>
+                    <h3 data-i18n="historyTitle">📜 プレイリスト履歴</h3>
                     <button class="btn-close" id="closeHistoryBtn">✕</button>
                 </div>
                 <div class="history-list" id="historyList">
@@ -302,7 +330,9 @@
         </div>
     </div>
 
+    <!-- Translations MUST load before app.js -->
+    <script src="translations.js"></script>
     <script src="app.js"></script>
+</body>
 
-
-</body></html>
+</html>

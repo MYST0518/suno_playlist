@@ -124,7 +124,25 @@ const translations = {
         langJa: '日本語',
         langEn: 'English',
         langZh: '中文',
-        langKo: '한국어'
+        langKo: '한국어',
+
+        // Theme Selector
+        theme: 'テーマ',
+        themeDefault: 'デフォルト',
+        themeTabby: '茶トラ猫',
+
+        // System Toasts & Dialogs
+        repeatNone: 'リピートオフ',
+        repeatAll: '全曲リピート',
+        repeatOne: '1曲リピート',
+        confirmClear: 'プレイリストをクリアしますか？',
+        onlineMessage: 'オンラインに復帰しました',
+        offlineMessage: 'オフラインです',
+        metaResolving: '短縮リンクを解決中...',
+        metaLoading: '読み込み中...',
+        metaTimeout: 'タイムアウト',
+        metaNotFound: 'トラックが見つかりません',
+        metaNoNetwork: 'ネットワークエラー'
     },
 
     en: {
@@ -249,7 +267,25 @@ const translations = {
         langJa: '日本語',
         langEn: 'English',
         langZh: '中文',
-        langKo: '한국어'
+        langKo: '한국어',
+
+        // Theme Selector
+        theme: 'Theme',
+        themeDefault: 'Default',
+        themeTabby: 'Tabby Cat',
+
+        // System Toasts & Dialogs
+        repeatNone: 'Repeat Off',
+        repeatAll: 'Repeat All',
+        repeatOne: 'Repeat One',
+        confirmClear: 'Are you sure you want to clear the playlist?',
+        onlineMessage: 'Back online',
+        offlineMessage: 'You are offline',
+        metaResolving: 'Resolving short link...',
+        metaLoading: 'Loading metadata...',
+        metaTimeout: 'Timeout',
+        metaNotFound: 'Track not found',
+        metaNoNetwork: 'Network error'
     },
 
     zh: {
@@ -374,7 +410,25 @@ const translations = {
         langJa: '日本語',
         langEn: 'English',
         langZh: '中文',
-        langKo: '한국어'
+        langKo: '한국어',
+
+        // Theme Selector
+        theme: '主题',
+        themeDefault: '默认',
+        themeTabby: '虎斑猫',
+
+        // System Toasts & Dialogs
+        repeatNone: '重复关闭',
+        repeatAll: '播放列表循环',
+        repeatOne: '单曲循环',
+        confirmClear: '您确定要清空播放列表吗？',
+        onlineMessage: '已恢复在线',
+        offlineMessage: '您已离线',
+        metaResolving: '正在解析短链接...',
+        metaLoading: '正在加载元数据...',
+        metaTimeout: '超时',
+        metaNotFound: '找不到曲目',
+        metaNoNetwork: '网络误差'
     },
 
     ko: {
@@ -499,14 +553,28 @@ const translations = {
         langJa: '日本語',
         langEn: 'English',
         langZh: '中文',
-        langKo: '한국어'
+        langKo: '한국어',
+
+        // Theme Selector
+        theme: '테마',
+        themeDefault: '기본',
+        themeTabby: '얼룩 고양이',
+
+        // System Toasts & Dialogs
+        repeatNone: '반복 끄기',
+        repeatAll: '전체 반복',
+        repeatOne: '한 곡 반복',
+        confirmClear: '재생목록을 지우시겠습니까?',
+        onlineMessage: '온라인으로 복귀',
+        offlineMessage: '오프라인 상태입니다',
+        metaResolving: '단축 링크를 확인 중...',
+        metaLoading: '노래 정보를 가져오는 중...',
+        metaTimeout: '시간 초과',
+        metaNotFound: '노래를 찾을 수 없습니다',
+        metaNoNetwork: '네트워크 오류'
     }
 };
 
-// Export for use in app.js
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = translations;
-} else {
-        window.translations = translations;
-}
-
+// Export translations to global scope
+// This must be available before app.js loads
+window.translations = translations;
