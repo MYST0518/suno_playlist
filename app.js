@@ -512,21 +512,43 @@ class SUNOPlaylist {
     // Setup offline detection
     setupOfflineDetection() {
         window.addEventListener('online', () => {
-            this.showToast(window.i18n.t('onlineMessage'), 'success');
+            const message = window.i18n ? window.i18n.t('onlineMessage') : 'Online';
+            this.showToast(message, 'success');
             this.isOffline = false;
-            this.elements.offlineBanner.classList.remove('show');
+            if (this.elements.offlineBanner) {
+                this.elements.offlineBanner.classList.remove('show');
+            }
         });
 
         window.addEventListener('offline', () => {
-            this.showToast(window.i18n.t('offlineMessage'), 'error');
+            const message = window.i18n ? window.i18n.t('offlineMessage') : 'Offline';
+            this.showToast(message, 'error');
             this.isOffline = true;
-            this.elements.offlineBanner.classList.add('show');
+            if (this.elements.offlineBanner) {
+                this.elements.offlineBanner.classList.add('show');
+            }
         });
 
-        // Show banner if offline
-        if (this.isOffline) {
-            this.elements.offlineBanner.classList.add('show');
-        }
+        // Show banner if offline - with a slight delay and a real network check to avoid false positives
+        setTimeout(async () => {
+            this.isOffline = !navigator.onLine;
+
+            // If the browser says we are offline, double check with a real fetch
+            if (this.isOffline) {
+                try {
+                    const probe = await fetch('/favicon.png', { method: 'HEAD', cache: 'no-store' });
+                    if (probe.ok) this.isOffline = false;
+                } catch (e) {
+                    // Truly offline
+                }
+            }
+
+            if (this.isOffline && this.elements.offlineBanner) {
+                this.elements.offlineBanner.classList.add('show');
+            } else if (this.elements.offlineBanner) {
+                this.elements.offlineBanner.classList.remove('show');
+            }
+        }, 3000);
     }
 
     // Setup keyboard shortcuts
@@ -1694,10 +1716,8 @@ class SUNOPlaylist {
     }
 }
 
-// Initialize app
-document.addEventListener('DOMContentLoaded', () => {
-    window.sunoPlaylist = new SUNOPlaylist();
-});
+// Main entry point is the integrated DOMContentLoaded listener at the end of the file
+
 
 // ===================================
 //    PWA Service Worker Registration
@@ -1776,117 +1796,79 @@ window.installPWA = async () => {
 //    Theme & I18n Initialization
 // ===================================
 
-// Apply initial translations and theme on page load
+// Apply initial translations, theme, and app on page load
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Theme Manager
-    window.themeManager = new ThemeManager();
-    window.themeManager.init();
-
-    // Initialize i18n AFTER translations.js has loaded
+    // 1. Initialize i18n FIRST so translations are available for all components
     window.i18n = new I18nManager();
     window.i18n.updateDOM();
 
-    // Theme selector event listeners
+    // 2. Initialize Theme Manager
+    window.themeManager = new ThemeManager();
+    window.themeManager.init();
+
+    // 3. Initialize the main App (must be after i18n and theme)
+    window.sunoPlaylist = new SUNOPlaylist();
+
+    // --- Selectors & Dropdowns Event Listeners ---
+
+    // Theme selector
     const themeBtn = document.getElementById('themeBtn');
     const themeDropdown = document.getElementById('themeDropdown');
 
     if (themeBtn && themeDropdown) {
-        // Toggle dropdown
         themeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             themeDropdown.classList.toggle('show');
-            // Close language dropdown
             const languageDropdown = document.getElementById('languageDropdown');
-            if (languageDropdown) {
-                languageDropdown.classList.remove('show');
-            }
+            if (languageDropdown) languageDropdown.classList.remove('show');
         });
 
-        // Theme option click
         document.querySelectorAll('.theme-option').forEach(option => {
             const theme = option.getAttribute('data-theme');
-
-            // Mark current theme as active
-            if (theme === window.themeManager.getCurrentTheme()) {
-                option.classList.add('active');
-            }
+            if (theme === window.themeManager.getCurrentTheme()) option.classList.add('active');
 
             option.addEventListener('click', () => {
                 window.themeManager.setTheme(theme);
-
-                // Update active states
-                document.querySelectorAll('.theme-option').forEach(opt => {
-                    opt.classList.remove('active');
-                });
+                document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
                 option.classList.add('active');
-
                 themeDropdown.classList.remove('show');
 
-                // Show toast
                 if (window.sunoPlaylist) {
-                    const themeNames = {
-                        default: window.i18n.t('themeDefault'),
-                        tabby: window.i18n.t('themeTabby')
-                    };
+                    const themeNames = { default: window.i18n.t('themeDefault'), tabby: window.i18n.t('themeTabby') };
                     window.sunoPlaylist.showToast(themeNames[theme] || theme, 'success');
                 }
             });
         });
     }
 
-    // Language selector event listeners
+    // Language selector
     const languageBtn = document.getElementById('languageBtn');
     const languageDropdown = document.getElementById('languageDropdown');
 
     if (languageBtn && languageDropdown) {
-        // Toggle dropdown
         languageBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             languageDropdown.classList.toggle('show');
-            // Close theme dropdown
-            if (themeDropdown) {
-                themeDropdown.classList.remove('show');
-            }
+            if (themeDropdown) themeDropdown.classList.remove('show');
         });
 
-        // Close dropdowns when clicking outside
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.language-selector')) {
-                languageDropdown.classList.remove('show');
-            }
-            if (!e.target.closest('.theme-selector') && themeDropdown) {
-                themeDropdown.classList.remove('show');
-            }
+            if (!e.target.closest('.language-selector') && languageDropdown) languageDropdown.classList.remove('show');
+            if (!e.target.closest('.theme-selector') && themeDropdown) themeDropdown.classList.remove('show');
         });
 
-        // Language option click  
         document.querySelectorAll('.language-option').forEach(option => {
             const lang = option.getAttribute('data-lang');
-
-            // Mark current language as active
-            if (lang === window.i18n.getCurrentLanguage()) {
-                option.classList.add('active');
-            }
+            if (lang === window.i18n.getCurrentLanguage()) option.classList.add('active');
 
             option.addEventListener('click', (e) => {
                 window.i18n.setLanguage(lang);
-
-                // Update active states
-                document.querySelectorAll('.language-option').forEach(opt => {
-                    opt.classList.remove('active');
-                });
+                document.querySelectorAll('.language-option').forEach(opt => opt.classList.remove('active'));
                 option.classList.add('active');
-
                 languageDropdown.classList.remove('show');
 
-                // Show toast
                 if (window.sunoPlaylist) {
-                    const langNames = {
-                        ja: '日本語',
-                        en: 'English',
-                        zh: '中文',
-                        ko: '한국어'
-                    };
+                    const langNames = { ja: '日本語', en: 'English', zh: '中文', ko: '한국어' };
                     window.sunoPlaylist.showToast(langNames[lang], 'success');
                 }
             });

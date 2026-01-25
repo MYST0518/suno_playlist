@@ -1007,13 +1007,15 @@ textarea::placeholder {
     font-weight: 500;
     font-size: 0.9rem;
     z-index: 1001;
-    transform: translateY(-100%);
+    transform: translateY(-110%);
     transition: transform var(--transition-normal);
     box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+    visibility: hidden;
 }
 
 .offline-banner.show {
     transform: translateY(0);
+    visibility: visible;
 }
 
 /* Retry indicator */
