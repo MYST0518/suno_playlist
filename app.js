@@ -428,6 +428,9 @@ class SUNOPlaylist {
         // Storage
         this.storage = new PlaylistStorage();
 
+        // Drag and drop state
+        this.draggedIndex = null;
+
         this.init();
     }
 
@@ -474,6 +477,9 @@ class SUNOPlaylist {
                 this.toggleHelpModal();
             }
         });
+
+        // Drag and Drop delegation for playlist
+        this.setupDragAndDrop();
 
         // Audio Events
         this.elements.audioPlayer.addEventListener('timeupdate', () => this.updateProgress());
@@ -584,6 +590,119 @@ class SUNOPlaylist {
                     break;
             }
         });
+    }
+
+    // Setup Drag and Drop event delegation
+    setupDragAndDrop() {
+        const container = this.elements.playlistContainer;
+
+        container.addEventListener('dragstart', (e) => {
+            const item = e.target.closest('.playlist-item');
+            if (!item) return;
+
+            this.draggedIndex = parseInt(item.dataset.index);
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', this.draggedIndex.toString());
+
+            // UI feedback
+            setTimeout(() => item.classList.add('dragging'), 0);
+        });
+
+        container.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const item = e.target.closest('.playlist-item');
+            if (!item || this.draggedIndex === null) return;
+
+            const targetIndex = parseInt(item.dataset.index);
+            if (targetIndex !== this.draggedIndex) {
+                item.classList.add('drag-over');
+            }
+        });
+
+        container.addEventListener('dragleave', (e) => {
+            const item = e.target.closest('.playlist-item');
+            if (item) item.classList.remove('drag-over');
+        });
+
+        container.addEventListener('dragend', (e) => {
+            const dragging = container.querySelector('.dragging');
+            if (dragging) dragging.classList.remove('dragging');
+            container.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+            this.draggedIndex = null;
+        });
+
+        container.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const item = e.target.closest('.playlist-item');
+
+            let fromIndex = this.draggedIndex;
+            if (fromIndex === null) {
+                const data = e.dataTransfer.getData('text/plain');
+                if (data !== "") fromIndex = parseInt(data);
+            }
+
+            if (fromIndex !== null && item) {
+                const targetIndex = parseInt(item.dataset.index);
+                // Reset draggedIndex BEFORE calling reorderPlaylist so that renderPlaylist can proceed
+                this.draggedIndex = null;
+
+                if (targetIndex !== fromIndex) {
+                    this.reorderPlaylist(fromIndex, targetIndex);
+                }
+            }
+
+            // Final cleanup
+            container.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+            this.draggedIndex = null;
+        });
+    }
+
+    // Reorder tracks in the playlist array
+    reorderPlaylist(fromIndex, toIndex) {
+        // Move item in current playlist
+        const item = this.playlist.splice(fromIndex, 1)[0];
+        this.playlist.splice(toIndex, 0, item);
+
+        // Update originalPlaylist if not in shuffle mode, or even if in shuffle mode 
+        // if we want to keep this manual order as the "new" base order.
+        if (!this.shuffleMode) {
+            this.originalPlaylist = [...this.playlist];
+        } else {
+            // If in shuffle mode, we probably also want to reflect this in the underlying list
+            // but for simplicity, let's update originalPlaylist to match the current manual order
+            // when the user wants to keep it.
+            this.originalPlaylist = [...this.playlist];
+        }
+
+        // Update currentIndex if playing song was moved
+        if (this.currentIndex === fromIndex) {
+            this.currentIndex = toIndex;
+        } else if (fromIndex < this.currentIndex && toIndex >= this.currentIndex) {
+            this.currentIndex--;
+        } else if (fromIndex > this.currentIndex && toIndex <= this.currentIndex) {
+            this.currentIndex++;
+        }
+
+        // Re-render
+        this.renderPlaylist();
+
+        // Save new order
+        this.updateURL();
+        this.autoSave();
+
+        // Update input field to match new order (optional but helpful)
+        this.syncInputToPlaylist();
+
+        // Show feedback
+        this.showToast('順序を入れ替えました', 'success');
+    }
+
+    // New helper: Sync textarea links to matches current playlist order
+    syncInputToPlaylist() {
+        const urls = this.playlist.map(t => `https://suno.com/song/${t.uuid}`);
+        this.elements.linksInput.value = urls.join('\n');
     }
 
     // Check if input field is focused
@@ -1047,7 +1166,10 @@ class SUNOPlaylist {
     }
 
     // Render playlist UI
-    renderPlaylist() {
+    renderPlaylist(ignoreGuard = false) {
+        // Prevent re-rendering while user is dragging, unless specifically requested
+        if (!ignoreGuard && this.draggedIndex !== null) return;
+
         this.elements.trackCount.textContent = `${this.playlist.length}曲`;
 
         if (this.playlist.length === 0) {
@@ -1070,7 +1192,8 @@ class SUNOPlaylist {
             }
 
             return `
-                <div class="${itemClass}" data-index="${index}">
+                <div class="${itemClass}" data-index="${index}" draggable="true">
+                    <span class="drag-handle">≡</span>
                     <span class="item-number">${index + 1}</span>
                     <div class="item-info">
                         <div class="item-title">
@@ -1086,7 +1209,10 @@ class SUNOPlaylist {
 
         // Add click handlers
         this.elements.playlistContainer.querySelectorAll('.playlist-item').forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('click', (e) => {
+                // Ignore if clicking on drag handle
+                if (e.target.closest('.drag-handle')) return;
+
                 const index = parseInt(item.dataset.index);
                 this.loadTrack(index);
                 this.play();
