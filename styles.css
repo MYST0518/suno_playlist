@@ -2398,21 +2398,23 @@ body {
         font-size: 0.9rem;
     }
 
-    /* Floating Buttons: Dynamic bottom position */
+    /* Floating Buttons: More subtle on mobile */
     .donate-btn-float,
     .help-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 1.8rem;
-        bottom: calc(25px + env(safe-area-inset-bottom));
+        width: 48px;
+        height: 48px;
+        font-size: 1.4rem;
+        bottom: calc(20px + env(safe-area-inset-bottom));
+        opacity: 0.7;
+        /* Make them less distracting */
     }
 
     .donate-btn-float {
-        right: 95px;
+        right: 78px;
     }
 
     .help-btn {
-        right: 25px;
+        right: 20px;
     }
 
     /* Theme-specific mobile backgrounds */
@@ -2460,15 +2462,19 @@ body {
         gap: 4px;
     }
 
+    /* Even more subtle on tiny screens */
     .donate-btn-float,
     .help-btn {
-        width: 52px;
-        height: 52px;
-        font-size: 1.5rem;
+        width: 44px;
+        height: 44px;
+        font-size: 1.2rem;
+        opacity: 0.65;
+        /* Even more transparent */
+        bottom: calc(18px + env(safe-area-inset-bottom));
     }
 
     .donate-btn-float {
-        right: 82px;
+        right: 72px;
     }
 }
 
@@ -2617,6 +2623,8 @@ body {
     background: #ff6b35;
     color: white;
     box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
+    opacity: 1;
+    /* Full opacity on hover */
 }
 
 .donate-btn-float:active,
@@ -2624,14 +2632,14 @@ body {
     transform: scale(0.9);
 }
 
-/* Pulsing Heart Animation */
+/* Pulsing Heart Animation - More subtle/slower */
 @keyframes heart-pulse {
     0% {
         transform: scale(1);
     }
 
     50% {
-        transform: scale(1.15);
+        transform: scale(1.08);
     }
 
     100% {
@@ -2641,8 +2649,9 @@ body {
 
 .donate-icon {
     display: inline-block;
-    animation: heart-pulse 2s ease-in-out infinite;
-    filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.3));
+    animation: heart-pulse 3s ease-in-out infinite;
+    /* Slower */
+    filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.2));
 }
 
 [data-theme="tabby"] .donate-btn-float,
