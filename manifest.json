@@ -1,6 +1,6 @@
 {
-    "name": "SUNO Playlist Player",
-    "short_name": "SUNO Player",
+    "name": "SUNO CAT PLAYER",
+    "short_name": "SUNO CAT",
     "description": "SUNOのAI音楽をプレイリストで楽しめるWebアプリ",
     "start_url": "/",
     "scope": "/",

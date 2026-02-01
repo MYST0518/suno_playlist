@@ -1,4 +1,4 @@
-/* ===================================
+﻿/* ===================================
    CSS Variables & Theme
    =================================== */
 
@@ -86,6 +86,41 @@
     --icon-mute: '😿';
 }
 
+/* 🌸 Sakura White Cat Theme */
+[data-theme="sakura"] {
+    --bg-primary: #fff0f5;
+    --bg-secondary: #ffebf2;
+    --bg-tertiary: #ffe1ef;
+    --bg-card: linear-gradient(135deg, rgba(255, 240, 245, 0.95) 0%, rgba(255, 225, 239, 0.98) 100%);
+    --bg-overlay: radial-gradient(ellipse at center, rgba(255, 105, 180, 0.1) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(255, 182, 193, 0.08) 0%, transparent 40%);
+
+    --accent-primary: #ff69b4;
+    --accent-secondary: #f06292;
+    --accent-tertiary: #ec407a;
+    --accent-success: #66bb6a;
+
+    --gradient-primary: linear-gradient(135deg, #ff69b4 0%, #f06292 100%);
+    --gradient-button: linear-gradient(135deg, #ff69b4 0%, #ec407a 100%);
+
+    --text-primary: #880e4f;
+    --text-secondary: #ad1457;
+    --text-muted: #c2185b80;
+
+    --border-color: rgba(255, 105, 180, 0.2);
+    --shadow-soft: 0 4px 15px rgba(255, 105, 180, 0.15);
+    --shadow-glow: 0 0 25px rgba(255, 105, 180, 0.2);
+
+    /* Sakura Cat-themed icons */
+    --icon-logo: '🌸';
+    --icon-play: '🐾';
+    --icon-pause: '😽';
+    --icon-shuffle: '🐈';
+    --icon-repeat: '🔄';
+    --icon-volume: '😺';
+    --icon-mute: '😿';
+}
+
 [data-theme="tabby"] body {
     background-color: var(--bg-primary) !important;
 }
@@ -107,7 +142,30 @@
     z-index: -1;
     opacity: 1 !important;
     filter: saturate(1.05) brightness(1.02);
-    /* 実写の自然なトーンを維持 */
+    /* 本来の自然なトーンを維持 */
+}
+
+[data-theme="sakura"] body {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="sakura"] body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        linear-gradient(rgba(255, 240, 245, 0.2), rgba(255, 240, 245, 0.3)),
+        url("white-cat-bg.png?v=3") !important;
+    background-size: cover !important;
+    background-position: left center !important;
+    /* 蟾ｦ遶ｯ縺ｫ蝗ｺ螳・*/
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    z-index: -1;
+    opacity: 1 !important;
 }
 
 [data-theme="tabby"] body::after {
@@ -146,6 +204,46 @@
 [data-theme="tabby"] .player-section::after {
     right: 15px;
     transform: rotate(15deg);
+}
+
+/* Sakura theme Cat Ears */
+[data-theme="sakura"] .player-section::before,
+[data-theme="sakura"] .player-section::after {
+    content: '';
+    position: absolute;
+    top: -16px;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-bottom: 24px solid #fff;
+    z-index: 0;
+    filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.05));
+}
+
+[data-theme="sakura"] .player-section::before {
+    left: 15px;
+    transform: rotate(-15deg);
+}
+
+[data-theme="sakura"] .player-section::after {
+    right: 15px;
+    transform: rotate(15deg);
+}
+
+/* Inner Pink ear */
+[data-theme="sakura"] .player-section::after {
+    box-shadow: inset 0 -10px 0 #ff69b4;
+    /* This doesn't work on borders, use child or separate approach */
+}
+
+/* Let's refine ears for sakura */
+[data-theme="sakura"] .player-section,
+[data-theme="sakura"] .input-section,
+[data-theme="sakura"] .playlist-section {
+    position: relative;
+    border: 2px solid rgba(255, 105, 180, 0.3);
+    box-shadow: 0 8px 32px rgba(255, 105, 180, 0.15);
 }
 
 /* Animation for the cat theme */
@@ -217,7 +315,14 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--bg-overlay);
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
+        url("black-cat-bg.png?v=4") !important;
+    background-size: cover !important;
+    background-position: right 20% center !important;
+    /* 蜿ｳ蛛ｴ縺ｫ蟇・○縺ｦ鬘斐′隕九∴繧九ｈ縺・↓隱ｿ謨ｴ */
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
     pointer-events: none;
     z-index: -1;
 }
@@ -301,18 +406,22 @@ body::before {
 
 .theme-btn,
 .language-btn {
-    width: 40px;
+    min-width: 40px;
+    width: auto;
     height: 40px;
+    padding: 0 var(--spacing-sm);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
     transition: var(--transition-fast);
     display: flex;
     align-items: center;
     justify-content: center;
+    white-space: nowrap;
+    gap: var(--spacing-xs);
 }
 
 .theme-btn:hover,
@@ -330,7 +439,8 @@ body::before {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     padding: var(--spacing-xs);
-    min-width: 160px;
+    min-width: 200px;
+    /* 蠎・￡縺ｦ1蛻励↓蜿弱ａ繧・*/
     z-index: 100;
     opacity: 0;
     visibility: hidden;
@@ -353,16 +463,19 @@ body::before {
     align-items: center;
     gap: var(--spacing-sm);
     width: 100%;
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: 10px var(--spacing-sm);
+    /* 荳贋ｸ九↓蟆代＠菴咏區 */
     background: transparent;
     border: none;
     border-radius: var(--radius-sm);
     color: var(--text-primary);
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: var(--transition-fast);
     text-align: left;
+    white-space: nowrap;
+    /* 邨ｶ蟇ｾ縺ｫ謾ｹ陦後＆縺帙↑縺・*/
 }
 
 .theme-option:hover,
@@ -1082,14 +1195,15 @@ textarea::placeholder {
 }
 
 .action-btn-sm.link-btn-sm {
-    height: 28px;
-    padding: 0 12px;
-    font-size: 0.8rem;
+    height: 24px;
+    padding: 0 8px;
+    font-size: 0.75rem;
     font-weight: 600;
-    border-radius: 14px;
+    border-radius: 12px;
     background: rgba(59, 130, 246, 0.15);
     border: 1px solid rgba(59, 130, 246, 0.4);
     color: #60a5fa;
+    flex-shrink: 0;
 }
 
 .action-btn-sm.link-btn-sm:hover {
@@ -1643,32 +1757,6 @@ textarea::placeholder {
     transform: translateY(-2px);
 }
 
-/* Help button */
-.help-btn {
-    position: fixed;
-    bottom: 100px;
-    right: 30px;
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-full);
-    border: none;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 100;
-    transition: var(--transition-fast);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(20px);
-}
-
-.help-btn:hover {
-    transform: scale(1.1);
-    background: var(--accent-primary);
-    border-color: var(--accent-primary);
-    box-shadow: 0 6px 25px rgba(255, 107, 53, 0.4);
-}
 
 /* Help modal */
 .help-modal {
@@ -1846,9 +1934,53 @@ kbd {
     color: var(--text-primary);
 }
 
+.help-footer {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.donate-btn-help {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid var(--accent-primary);
+    color: var(--accent-primary);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.donate-btn-help:hover {
+    background: var(--accent-primary);
+    color: white;
+}
+
 #closeHelpBtn {
-    width: 100%;
-    margin-top: var(--spacing-md);
+    flex: 1;
+    margin-top: 0;
+}
+
+[data-theme="sakura"] .help-footer {
+    border-top-color: rgba(255, 105, 180, 0.2);
+}
+
+[data-theme="sakura"] .donate-btn-help {
+    background: rgba(255, 105, 180, 0.1);
+    border-color: #ff69b4;
+    color: #ff69b4;
+}
+
+[data-theme="sakura"] .donate-btn-help:hover {
+    background: #ff69b4;
+    color: white;
 }
 
 /* Enhanced animations */
@@ -2127,6 +2259,13 @@ body {
         font-size: 0.75rem;
     }
 
+    .theme-btn,
+    .language-btn {
+        padding: 0 8px;
+        font-size: 0.85rem;
+        height: 36px;
+    }
+
     .player-section {
         padding: var(--spacing-md);
     }
@@ -2164,130 +2303,183 @@ body {
     }
 }
 
-/* Mobile */
+/* ===================================
+   Mobile Optimization
+   =================================== */
 @media (max-width: 480px) {
+    :root {
+        --spacing-md: 0.85rem;
+    }
+
     .app-container {
-        padding: var(--spacing-xs);
+        padding: 0 10px;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom));
         gap: var(--spacing-sm);
+    }
+
+    /* Header: Centered & Compact */
+    .header {
+        padding: 15px 5px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .header-controls {
+        width: 100%;
+        justify-content: center;
+        margin-top: 8px;
     }
 
     .logo h1 {
         font-size: 1.5rem;
     }
 
-    .logo p {
-        font-size: 0.7rem;
+    /* Player: More comfortable targets */
+    .player-section {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-xl);
     }
 
     .controls {
-        gap: var(--spacing-sm);
+        gap: 6px;
+        width: 100%;
+        justify-content: space-evenly;
     }
 
     .control-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
+        width: 46px;
+        height: 46px;
+        font-size: 1.2rem;
     }
 
     .play-btn {
-        width: 56px;
-        height: 56px;
-        font-size: 1.5rem;
+        width: 66px;
+        height: 66px;
+        font-size: 2.2rem;
     }
 
-    .player-section {
-        padding: var(--spacing-sm);
+    /* Progress bar: Thickened for touch */
+    .progress-container {
+        padding: 12px 0;
+    }
+
+    .progress-bar {
+        height: 8px;
+        border-radius: 4px;
     }
 
     .track-title {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
-    .track-artist {
-        font-size: 0.85rem;
-    }
-
-    /* Input section */
+    /* Input: iOS specific fixes */
     .input-section textarea {
-        min-height: 120px;
-        font-size: 0.9rem;
+        min-height: 100px;
+        font-size: 16px;
+        /* Prevents auto-zoom on iOS */
     }
 
-    .btn {
-        padding: var(--spacing-sm) var(--spacing-md);
-        font-size: 0.9rem;
-    }
-
-    /* Playlist */
+    /* Playlist: Modern touch list */
     .playlist-item {
-        padding: var(--spacing-sm);
+        padding: 12px 10px;
+        border-radius: var(--radius-md);
     }
 
-    .item-title {
-        font-size: 0.85rem;
+    .item-art {
+        width: 44px;
+        height: 44px;
     }
 
-    .item-artist {
-        font-size: 0.75rem;
+    /* Link button: more prominent */
+    .action-btn.link-btn {
+        height: 40px;
+        padding: 0 16px;
+        font-size: 0.9rem;
     }
 
-    /* Help button */
+    /* Floating Buttons: Dynamic bottom position */
+    .donate-btn-float,
     .help-btn {
-        bottom: 80px;
-        right: 20px;
-        width: 48px;
-        height: 48px;
-        font-size: 1.3rem;
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+        bottom: calc(25px + env(safe-area-inset-bottom));
     }
 
-    /* Share dropdown */
-    .share-dropdown {
-        right: auto;
-        left: 0;
-        min-width: 140px;
+    .donate-btn-float {
+        right: 95px;
     }
 
-    /* Toast */
-    .toast {
-        width: 90%;
-        font-size: 0.85rem;
-        padding: var(--spacing-xs) var(--spacing-md);
+    .help-btn {
+        right: 25px;
+    }
+
+    /* Theme-specific mobile backgrounds */
+    [data-theme="sakura"] body::before {
+        background-position: left 15% center !important;
+        opacity: 0.7 !important;
+    }
+
+    [data-theme="tabby"] body::before,
+    body::before {
+        background-position: center !important;
+        background-size: cover !important;
+    }
+
+    /* Modal adjustments */
+    .help-content,
+    .donate-content,
+    .history-content {
+        width: 95%;
+        margin: 0 10px;
+        padding: 20px;
+        max-height: 85vh;
+        border-radius: var(--radius-xl);
     }
 }
 
-/* Small Mobile (SE, older devices) */
+/* Small devices (iPhone SE models) */
 @media (max-width: 360px) {
     .logo h1 {
         font-size: 1.3rem;
     }
 
     .control-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 0.9rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
     }
 
     .play-btn {
-        width: 52px;
-        height: 52px;
+        width: 60px;
+        height: 60px;
     }
 
-    .player-section {
-        padding: var(--spacing-xs);
+    .controls {
+        gap: 4px;
+    }
+
+    .donate-btn-float,
+    .help-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 1.5rem;
+    }
+
+    .donate-btn-float {
+        right: 82px;
     }
 }
 
-/* PWA Standalone Mode Specific */
+/* PWA Standalone Mode adjustments */
 @media all and (display-mode: standalone) {
-
-    /* Adjust for PWA fullscreen */
     body {
-        padding-top: max(env(safe-area-inset-top), var(--spacing-sm));
+        padding-top: max(env(safe-area-inset-top), 10px);
     }
 
-    /* Hide browser-specific elements */
-    .browser-only {
-        display: none !important;
+    .header {
+        padding-top: 25px;
     }
 }
 
@@ -2385,52 +2577,90 @@ body {
 }
 
 /* ===================================
-   Donate Buttons
+   Donate & Help Floating Buttons
    =================================== */
-.donate-btn-float {
+.donate-btn-float,
+.help-btn {
     position: fixed;
-    right: calc(var(--spacing-md) + 60px);
-    /* help-btn の隣 */
-    bottom: var(--spacing-md);
-    width: 48px;
-    height: 48px;
+    bottom: 30px;
+    width: 72px;
+    /* さらにサイズアップ */
+    height: 72px;
     border-radius: 50%;
-    background: white;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(45, 45, 45, 0.85);
+    /* 密度を少しアップ */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     z-index: 1000;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-size: 1.4rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 2.2rem;
+    /* アイコンもさらに大きく */
 }
 
-.donate-btn-float:hover {
+.donate-btn-float {
+    right: 114px;
+    /* 30px(base) + 72px(btn) + 12px(gap) */
+}
+
+.help-btn {
+    right: 30px;
+}
+
+.donate-btn-float:hover,
+.help-btn:hover {
     transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
     background: #ff6b35;
     color: white;
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
 }
 
-.donate-btn-float:active {
+.donate-btn-float:active,
+.help-btn:active {
     transform: scale(0.9);
 }
 
-[data-theme="tabby"] .donate-btn-float {
+/* Pulsing Heart Animation */
+@keyframes heart-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.donate-icon {
+    display: inline-block;
+    animation: heart-pulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.3));
+}
+
+[data-theme="tabby"] .donate-btn-float,
+[data-theme="tabby"] .help-btn {
+    background: rgba(230, 126, 34, 0.2);
+    border-color: rgba(230, 126, 34, 0.4);
+    color: #e67e22;
+}
+
+[data-theme="tabby"] .donate-btn-float:hover,
+[data-theme="tabby"] .help-btn:hover {
     background: #e67e22;
     color: white;
 }
 
-[data-theme="tabby"] .donate-btn-float:hover {
-    background: #ff8c00;
-    box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
-}
-
 [data-theme="tabby"] .donate-btn-float .donate-icon::before {
-    content: '🐾';
-    font-size: 1.4rem;
+    content: '❤️';
+    font-size: 2.2rem;
 }
 
 [data-theme="tabby"] .donate-btn-float .donate-icon {
@@ -2473,6 +2703,131 @@ body {
     border-top-color: rgba(230, 126, 34, 0.2);
 }
 
+/* ===================================
+   Donate Modal
+   =================================== */
+.donate-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.donate-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.donate-content {
+    background: var(--bg-player);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.donate-modal.show .donate-content {
+    transform: scale(1);
+}
+
+.donate-content h3 {
+    margin-bottom: var(--spacing-lg);
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-primary);
+}
+
+.donate-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.donate-option-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    text-align: left;
+}
+
+.donate-option-btn:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+}
+
+.donate-option-btn.bmac {
+    background: linear-gradient(135deg, #FFDD00 0%, #F4BD00 100%);
+    color: #000;
+}
+
+.donate-option-btn.wishlist {
+    background: linear-gradient(135deg, #232F3E 0%, #37475A 100%);
+}
+
+.option-icon {
+    font-size: 1.5rem;
+}
+
+.btn-close-modal {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+[data-theme="tabby"] .donate-content {
+    border: 2px solid rgba(230, 126, 34, 0.3);
+    background: rgba(255, 249, 240, 0.95);
+}
+
+[data-theme="tabby"] .donate-content h3 {
+    color: #e67e22;
+}
+
+[data-theme="tabby"] .donate-option-btn.bmac {
+    background: #e67e22;
+    color: white;
+}
+
+[data-theme="sakura"] .donate-content {
+    border: 2px solid rgba(255, 105, 180, 0.3);
+    background: rgba(255, 240, 245, 0.95);
+}
+
+[data-theme="sakura"] .donate-content h3 {
+    color: #ff69b4;
+}
+
+[data-theme="sakura"] .donate-option-btn.bmac {
+    background: #ff69b4;
+    color: white;
+}
+
 /* Nyaa! Animation */
 @keyframes nyaa-float {
     0% {
@@ -2501,4 +2856,9 @@ body {
     color: #e67e22;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     animation: nyaa-float 1.5s ease-out forwards;
+
+}
+
+[data-theme="sakura"] .nyaa-effect {
+    color: #ff69b4;
 }

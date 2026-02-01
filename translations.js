@@ -4,7 +4,7 @@
 const translations = {
     ja: {
         // App Info
-        appName: 'SUNO Playlist Player',
+        appName: 'SUNO CAT PLAYER',
         appTitle: 'SUNO Playlist',
         appDescription: 'SUNOのリンクをまとめて連続再生',
 
@@ -135,12 +135,15 @@ const translations = {
         langKo: '한국어',
 
         // Theme Selector
-        theme: 'テーマ',
-        themeDefault: 'デフォルト',
-        themeTabby: '茶トラ猫',
-        openInSuno: 'SUNOで開く',
+        theme: '🐈ネコを選ぶ',
+        themeDefault: 'ルナ（Dark）',
+        themeTabby: 'サニー（Light）',
+        themeSakura: 'サクラ（Pink）',
+        openInSuno: 'SUNO',
         donateSupport: '開発を応援する',
         donateTreat: '🐾 猫におやつをあげる',
+        donateWishlist: '🎁 猫におかしをあげる',
+        donateSelectTitle: '応援方法を選んでね🐾',
 
         // System Toasts & Dialogs
         repeatNone: 'リピートオフ',
@@ -158,7 +161,7 @@ const translations = {
 
     en: {
         // App Info
-        appName: 'SUNO Playlist Player',
+        appName: 'SUNO CAT PLAYER',
         appTitle: 'SUNO Playlist',
         appDescription: 'Play SUNO music continuously',
 
@@ -267,9 +270,11 @@ const translations = {
         toastLoading: 'Loading...',
         toastUpdated: 'App updated',
         toastInstalled: 'App installed!',
-        openInSuno: 'Open in SUNO',
+        openInSuno: 'SUNO',
         donateSupport: 'Support Developer',
         donateTreat: '🐾 Buy Cat a Treat',
+        donateWishlist: '🎁 Gift for Cats',
+        donateSelectTitle: 'Support me🐾',
 
         // Error Messages
         errorEmpty: 'Playlist is empty',
@@ -291,9 +296,10 @@ const translations = {
         langKo: '한국어',
 
         // Theme Selector
-        theme: 'Theme',
-        themeDefault: 'Default',
-        themeTabby: 'Tabby Cat',
+        theme: '🐈Choose Cat',
+        themeDefault: 'Luna (Dark)',
+        themeTabby: 'Sunny (Light)',
+        themeSakura: 'Sakura (Pink)',
 
         // System Toasts & Dialogs
         repeatNone: 'Repeat Off',
@@ -446,7 +452,7 @@ const translations = {
 
         // Theme Selector
         theme: '主题',
-        themeDefault: '默认',
+        themeDefault: '黑猫',
         themeTabby: '虎斑猫',
 
         // System Toasts & Dialogs
@@ -600,7 +606,7 @@ const translations = {
 
         // Theme Selector
         theme: '테마',
-        themeDefault: '기본',
+        themeDefault: '검은 고양이',
         themeTabby: '얼룩 고양이',
 
         // System Toasts & Dialogs

@@ -64,6 +64,11 @@ class I18nManager {
             } else {
                 element.textContent = translation;
             }
+
+            // Also update title attribute if it exists
+            if (element.hasAttribute('title')) {
+                element.setAttribute('title', translation);
+            }
         });
 
         // Update document title
@@ -92,8 +97,8 @@ class ThemeManager {
         // Icon mapping for different themes
         this.icons = {
             default: {
-                logo: '🎵',
-                play: '▶',
+                logo: '🐈‍⬛',
+                play: '🐾',
                 pause: '⏸',
                 shuffle: '🔀',
                 previous: '⏮',
@@ -114,6 +119,18 @@ class ThemeManager {
                 repeatOne: '🐱',
                 volume: '😺',
                 mute: '😿'
+            },
+            sakura: {
+                logo: '🌸',
+                play: '🐾',
+                pause: '😽',
+                shuffle: '🐈',
+                previous: '⏮',
+                next: '⏭',
+                repeat: '🔄',
+                repeatOne: '🤍',
+                volume: '😺',
+                mute: '😿'
             }
         };
     }
@@ -122,7 +139,7 @@ class ThemeManager {
     detectTheme() {
         // Priority: LocalStorage > Default (default)
         const stored = localStorage.getItem(this.THEME_KEY);
-        if (stored && (stored === 'default' || stored === 'tabby')) {
+        if (stored && (stored === 'default' || stored === 'tabby' || stored === 'sakura')) {
             return stored;
         }
         return 'default';
@@ -130,7 +147,7 @@ class ThemeManager {
 
     // Set theme
     setTheme(theme) {
-        if (theme !== 'default' && theme !== 'tabby') {
+        if (theme !== 'default' && theme !== 'tabby' && theme !== 'sakura') {
             console.error(`Theme ${theme} not supported`);
             return;
         }
@@ -144,8 +161,8 @@ class ThemeManager {
     applyTheme() {
         const html = document.documentElement;
 
-        if (this.currentTheme === 'tabby') {
-            html.setAttribute('data-theme', 'tabby');
+        if (this.currentTheme && this.currentTheme !== 'default') {
+            html.setAttribute('data-theme', this.currentTheme);
         } else {
             html.removeAttribute('data-theme');
         }
@@ -415,6 +432,8 @@ class SUNOPlaylist {
             nextBtn: document.getElementById('nextBtn'),
             shuffleBtn: document.getElementById('shuffleBtn'),
             shuffleIcon: document.getElementById('shuffleIcon'),
+            seekBackBtn: document.getElementById('seekBackBtn'),
+            seekForwardBtn: document.getElementById('seekForwardBtn'),
             repeatBtn: document.getElementById('repeatBtn'),
             repeatIcon: document.getElementById('repeatIcon'),
             clearBtn: document.getElementById('clearBtn'),
@@ -444,7 +463,11 @@ class SUNOPlaylist {
             closeHistoryBtn: document.getElementById('closeHistoryBtn'),
             openSunoBtn: document.getElementById('openSunoBtn'),
             donateBtn: document.getElementById('donateBtn'),
-            helpDonateBtn: document.getElementById('helpDonateBtn')
+            helpDonateBtn: document.getElementById('helpDonateBtn'),
+            donateModal: document.getElementById('donateModal'),
+            closeDonateBtn: document.getElementById('closeDonateBtn'),
+            bmacLink: document.getElementById('bmacLink'),
+            wishlistLink: document.getElementById('wishlistLink')
         };
 
         // Loading state
@@ -480,6 +503,8 @@ class SUNOPlaylist {
         this.elements.nextBtn.addEventListener('click', () => this.playNext());
         this.elements.shuffleBtn.addEventListener('click', () => this.toggleShuffle());
         this.elements.repeatBtn.addEventListener('click', () => this.toggleRepeat());
+        this.elements.seekBackBtn?.addEventListener('click', () => this.seekRelative(-5));
+        this.elements.seekForwardBtn?.addEventListener('click', () => this.seekRelative(5));
         this.elements.clearBtn.addEventListener('click', () => this.clearPlaylist());
         this.elements.importBtn.addEventListener('click', () => this.triggerImport());
         this.elements.importFile.addEventListener('change', (e) => this.importPlaylist(e));
@@ -490,6 +515,21 @@ class SUNOPlaylist {
         this.elements.closeHelpBtn.addEventListener('click', () => this.toggleHelpModal());
         this.elements.donateBtn?.addEventListener('click', (e) => this.handleDonate(e));
         this.elements.helpDonateBtn?.addEventListener('click', (e) => this.handleDonate(e));
+
+        // Donate modal listeners
+        this.elements.closeDonateBtn?.addEventListener('click', () => {
+            this.elements.donateModal?.classList.remove('show');
+        });
+        this.elements.donateModal?.addEventListener('click', (e) => {
+            if (e.target === this.elements.donateModal) {
+                this.elements.donateModal?.classList.remove('show');
+            }
+        });
+        [this.elements.bmacLink, this.elements.wishlistLink].forEach(link => {
+            link?.addEventListener('click', () => {
+                setTimeout(() => this.elements.donateModal?.classList.remove('show'), 500);
+            });
+        });
 
         // Re-add click listener as fallback/safety for the main link
         this.elements.openSunoBtn?.addEventListener('click', (e) => {
@@ -527,7 +567,13 @@ class SUNOPlaylist {
 
         // Audio Events
         this.elements.audioPlayer.addEventListener('timeupdate', () => this.updateProgress());
-        this.elements.audioPlayer.addEventListener('ended', () => this.playNext());
+        this.elements.audioPlayer.addEventListener('ended', () => {
+            if (this.repeatMode === 'one') {
+                this.play();
+            } else {
+                this.playNext();
+            }
+        });
         this.elements.audioPlayer.addEventListener('loadedmetadata', () => this.updateDuration());
         this.elements.audioPlayer.addEventListener('error', (e) => this.handleError(e));
 
@@ -891,8 +937,8 @@ class SUNOPlaylist {
         const promises = this.playlist.map(async (track) => {
             const meta = await this.fetchSongMetadata(track.uuid);
             if (meta && meta.title) {
-                track.title = meta.title;
-                track.artist = meta.artist;
+                track.title = this.decodeHtmlEntities(meta.title);
+                track.artist = this.decodeHtmlEntities(meta.artist);
                 track.thumbnail = meta.thumbnail;
                 this.loadingStates.set(track.uuid, 'loaded');
             } else {
@@ -972,7 +1018,7 @@ class SUNOPlaylist {
                         <div class="item-artist">${this.escapeHtml(track.artist)}</div>
                     </div>
                     <div class="item-actions">
-                        <a href="https://suno.com/song/${track.uuid}" target="_blank" rel="noopener noreferrer" class="action-btn-sm link-btn-sm" onclick="event.stopPropagation(); window.open('https://suno.com/song/${track.uuid}', '_blank'); return false;" title="SUNOで開く">🔗 SUNO</a>
+                        <a href="https://suno.com/song/${track.uuid}" target="_blank" rel="noopener noreferrer" class="action-btn-sm link-btn-sm" onclick="event.stopPropagation(); window.open('https://suno.com/song/${track.uuid}', '_blank'); return false;" title="SUNOで開く">SUNO</a>
                     </div>
                 </div>
             `;
@@ -991,6 +1037,13 @@ class SUNOPlaylist {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    decodeHtmlEntities(text) {
+        if (!text) return '';
+        const txt = document.createElement("textarea");
+        txt.innerHTML = text;
+        return txt.value;
     }
 
     updateNowPlaying() {
@@ -1048,6 +1101,8 @@ class SUNOPlaylist {
         this.elements.audioPlayer.play().then(() => {
             this.isPlaying = true;
             this.updateControlIcons();
+            // Ensure first update
+            this.updateProgress();
         });
     }
     pause() {
@@ -1057,16 +1112,34 @@ class SUNOPlaylist {
     }
 
     playNext() {
-        if (this.currentIndex < this.playlist.length - 1) {
-            this.loadTrack(this.currentIndex + 1);
-            if (this.isPlaying) this.play();
+        if (this.playlist.length === 0) return;
+
+        let nextIndex = this.currentIndex + 1;
+        if (nextIndex >= this.playlist.length) {
+            if (this.repeatMode === 'all') {
+                nextIndex = 0;
+            } else {
+                return;
+            }
         }
+
+        this.loadTrack(nextIndex);
+        if (this.isPlaying) this.play();
     }
     playPrevious() {
-        if (this.currentIndex > 0) {
-            this.loadTrack(this.currentIndex - 1);
-            if (this.isPlaying) this.play();
+        if (this.playlist.length === 0) return;
+
+        let prevIndex = this.currentIndex - 1;
+        if (prevIndex < 0) {
+            if (this.repeatMode === 'all') {
+                prevIndex = this.playlist.length - 1;
+            } else {
+                return;
+            }
         }
+
+        this.loadTrack(prevIndex);
+        if (this.isPlaying) this.play();
     }
 
     setVolume(v) { this.elements.audioPlayer.volume = v / 100; }
@@ -1075,7 +1148,10 @@ class SUNOPlaylist {
         const percent = (e.clientX - rect.left) / rect.width;
         this.elements.audioPlayer.currentTime = percent * this.elements.audioPlayer.duration;
     }
-    seekRelative(s) { this.elements.audioPlayer.currentTime += s; }
+    seekRelative(s) {
+        this.elements.audioPlayer.currentTime += s;
+        this.updateProgress();
+    }
     toggleMute() { this.elements.audioPlayer.muted = !this.elements.audioPlayer.muted; }
 
     toggleShuffle() {
@@ -1115,10 +1191,23 @@ class SUNOPlaylist {
     }
 
     updateProgress() {
+        if (!this.elements.audioPlayer.duration) return;
         const p = (this.elements.audioPlayer.currentTime / this.elements.audioPlayer.duration) * 100;
         this.elements.progress.style.width = `${p}%`;
+        this.elements.currentTime.textContent = this.formatTime(this.elements.audioPlayer.currentTime);
     }
-    updateDuration() { /* Logic */ }
+
+    updateDuration() {
+        if (!this.elements.audioPlayer.duration) return;
+        this.elements.duration.textContent = this.formatTime(this.elements.audioPlayer.duration);
+    }
+
+    formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
     handleError(e) { this.playNext(); }
     showLoadingProgress(show) { this.elements.loadingProgress.classList.toggle('show', show); }
     showToast(m, type = 'default') {
@@ -1141,11 +1230,18 @@ class SUNOPlaylist {
 
     handleDonate(e) {
         if (e) e.preventDefault();
-        const isTabby = document.documentElement.getAttribute('data-theme') === 'tabby';
-        const nyaaText = isTabby ? 'Nyaa! 🐾' : 'Thanks! ❤️';
+
+        const theme = document.documentElement.getAttribute('data-theme');
+        let nyaaText = 'Thanks! ❤️';
+        if (theme === 'tabby') nyaaText = 'Nyaa! 🐾';
+        if (theme === 'sakura') nyaaText = 'Nyaa! 🌸';
+
         this.createNyaaEffect(nyaaText);
-        const donateUrl = 'https://www.buymeacoffee.com/miya_myst';
-        setTimeout(() => { window.open(donateUrl, '_blank'); }, 800);
+
+        // Show selection modal with slight delay for effect
+        setTimeout(() => {
+            this.elements.donateModal?.classList.add('show');
+        }, 600);
     }
 
     createNyaaEffect(text) {

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    <title>SUNO Playlist Player</title>
+    <title>SUNO CAT PLAYER</title>
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
@@ -48,24 +48,28 @@
         <header class="header">
             <div class="logo">
                 <span class="logo-icon">🎵</span>
-                <h1 data-i18n="appTitle">SUNO Playlist</h1>
+                <h1 data-i18n="appName">SUNO CAT PLAYER</h1>
             </div>
             <p class="tagline" data-i18n="appDescription">SUNOリンクをペーストして連続再生</p>
 
             <div class="header-controls">
                 <!-- Theme Selector -->
                 <div class="theme-selector">
-                    <button class="theme-btn" id="themeBtn" title="Theme / テーマ">
-                        🎨
+                    <button class="theme-btn" id="themeBtn" title="🐈ネコを選ぶ" data-i18n="theme">
+                        🐈
                     </button>
                     <div class="theme-dropdown" id="themeDropdown">
                         <button class="theme-option" data-theme="default">
-                            <span class="theme-icon">🎵</span>
-                            <span data-i18n="themeDefault">デフォルト</span>
+                            <span class="theme-icon">🐈‍⬛</span>
+                            <span data-i18n="themeDefault">ルナ（Dark）</span>
                         </button>
                         <button class="theme-option" data-theme="tabby">
                             <span class="theme-icon">🐱</span>
-                            <span data-i18n="themeTabby">茶トラ猫</span>
+                            <span data-i18n="themeTabby">サニー（Light）</span>
+                        </button>
+                        <button class="theme-option" data-theme="sakura">
+                            <span class="theme-icon">🤍</span>
+                            <span data-i18n="themeSakura">サクラ（Pink）</span>
                         </button>
                     </div>
                 </div>
@@ -124,9 +128,8 @@
                         <div class="track-artist" id="trackArtist">リンクを入力してください</div>
                     </div>
                     <div class="track-actions">
-                        <a href="#" class="action-btn link-btn" id="openSunoBtn" target="_blank" title="SUNOで開く">
-                            <span>🔗</span>
-                            <span data-i18n="openInSuno">SUNOで開く</span>
+                        <a href="#" class="action-btn link-btn" id="openSunoBtn" target="_blank" title="SUNO">
+                            <span data-i18n="openInSuno">SUNO</span>
                         </a>
                     </div>
                 </div>
@@ -145,6 +148,9 @@
                     <button class="control-btn" id="shuffleBtn" title="シャッフル">
                         <span id="shuffleIcon">🔀</span>
                     </button>
+                    <button class="control-btn" id="seekBackBtn" title="5秒戻る (←)">
+                        <span>⏪</span>
+                    </button>
                     <button class="control-btn" id="prevBtn" title="前の曲 (P)">
                         <span>⏮</span>
                     </button>
@@ -153,6 +159,9 @@
                     </button>
                     <button class="control-btn" id="nextBtn" title="次の曲 (N)">
                         <span>⏭</span>
+                    </button>
+                    <button class="control-btn" id="seekForwardBtn" title="5秒進む (→)">
+                        <span>⏩</span>
                     </button>
                     <button class="control-btn" id="repeatBtn" title="リピート">
                         <span id="repeatIcon">🔁</span>
@@ -320,12 +329,33 @@
                         </div>
                     </div>
                 </div>
-                <!-- Donate Button -->
-                <a href="#" class="btn-icon donate-btn" id="donateBtnModal" title="Support">
-                    <span class="donate-icon">❤️</span>
-                    <span class="donate-label" data-i18n="donateSupport">開発を応援する</span>
-                </a>
-                <button class="btn btn-primary" id="closeHelpBtn" data-i18n="close">閉じる</button>
+                <div class="help-footer">
+                    <button class="donate-btn-help" id="helpDonateBtn">
+                        <span class="donate-icon">❤️</span>
+                        <span data-i18n="donateSupport">開発を応援する</span>
+                    </button>
+                    <button class="btn btn-primary" id="closeHelpBtn" data-i18n="close">閉じる</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Donate Modal -->
+        <div class="donate-modal" id="donateModal">
+            <div class="donate-content">
+                <h3 data-i18n="donateSelectTitle">応援方法を選んでね🐾</h3>
+                <div class="donate-options">
+                    <a href="https://www.buymeacoffee.com/miya_myst" target="_blank" class="donate-option-btn bmac"
+                        id="bmacLink">
+                        <span class="option-icon">☕</span>
+                        <span data-i18n="donateTreat">🐾 猫におやつをあげる</span>
+                    </a>
+                    <a href="https://www.amazon.jp/hz/wishlist/ls/1L2SU64VCU5N2?ref_=wl_share" target="_blank"
+                        class="donate-option-btn wishlist" id="wishlistLink">
+                        <span class="option-icon">🎁</span>
+                        <span data-i18n="donateWishlist">🎁 ほしい物リスト</span>
+                    </a>
+                </div>
+                <button class="btn-close-modal" id="closeDonateBtn">✕</button>
             </div>
         </div>
 
