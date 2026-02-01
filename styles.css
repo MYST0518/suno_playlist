@@ -99,7 +99,7 @@
     bottom: 0;
     background-image:
         linear-gradient(rgba(255, 249, 240, 0.45), rgba(255, 249, 240, 0.45)),
-        url("tabby-bg.png") !important;
+        url("tabby-bg.png?v=2") !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
