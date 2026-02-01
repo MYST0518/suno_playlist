@@ -1,5 +1,5 @@
 // Service Worker for SUNO Playlist Player PWA
-const CACHE_NAME = 'suno-playlist-v4';
+const CACHE_NAME = 'suno-playlist-v5';
 const OFFLINE_URL = '/';
 
 // Files to cache on install
