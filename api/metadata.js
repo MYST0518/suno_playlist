@@ -31,19 +31,19 @@ export default async function handler(req, res) {
     }
 }
 
-// Fetch metadata from SUNO embed page
+// Fetch metadata from SUNO song page
 async function fetchSunoMetadata(uuid) {
-    const url = `https://suno.com/embed/${uuid}`;
+    const url = `https://suno.com/song/${uuid}`;
 
     try {
-        // Use fetch with timeout
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         const response = await fetch(url, {
             signal: controller.signal,
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
             }
         });
 
@@ -57,42 +57,32 @@ async function fetchSunoMetadata(uuid) {
             };
         }
 
-        const html = await response.text();
+        const data = await response.text();
 
-        // Extract title from the page
-        const titleMatch = html.match(/<title>([^<]+)<\/title>/);
-        if (titleMatch) {
-            const fullTitle = titleMatch[1];
-            // Title format: "Song Name by Artist | Suno"
-            const parts = fullTitle.split(' by ');
-            if (parts.length >= 2) {
-                const songName = parts[0].trim();
-                const artistPart = parts[1].split(' | ')[0].trim();
-                return { title: songName, artist: artistPart };
-            }
-            return {
-                title: fullTitle.split(' | ')[0].trim(),
-                artist: 'SUNO'
-            };
-        }
+        // Extract title and artist from HTML (basic scraping)
+        const titleMatch = data.match(/<title>([^<]+)<\/title>/i);
+        const title = titleMatch ? titleMatch[1].split(' by ')[0].replace(' | Suno', '').trim() : 'Unknown Title';
+        const artistMatch = data.match(/by ([^|]+)\|/i) || data.match(/artist":"([^"]+)"/i);
+        const artist = artistMatch ? artistMatch[1].trim() : 'Suno';
+
+        // Improved thumbnail extraction
+        const ogImageMatch = data.match(/property="og:image"\s+content="([^"]+)"/i) ||
+            data.match(/content="([^"]+)"\s+property="og:image"/i);
+        const jsonImageMatch = data.match(/"image_url":"([^"]+)"/i) ||
+            data.match(/"imageUrl":"([^"]+)"/i);
+        const fallbackThumb = `https://cdn1.suno.ai/image_${uuid}.png`;
+        const thumbnail = ogImageMatch ? ogImageMatch[1] : (jsonImageMatch ? jsonImageMatch[1] : fallbackThumb);
 
         return {
-            title: null,
-            artist: null,
-            error: 'No metadata found'
+            uuid,
+            title,
+            artist,
+            thumbnail: thumbnail
         };
     } catch (error) {
         if (error.name === 'AbortError') {
-            return {
-                title: null,
-                artist: null,
-                error: 'Timeout'
-            };
+            return { title: null, artist: null, error: 'Timeout' };
         }
-        return {
-            title: null,
-            artist: null,
-            error: error.message
-        };
+        return { title: null, artist: null, error: error.message };
     }
 }

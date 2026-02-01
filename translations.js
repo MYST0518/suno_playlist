@@ -8,6 +8,11 @@ const translations = {
         appTitle: 'SUNO Playlist',
         appDescription: 'SUNOのリンクをまとめて連続再生',
 
+        // Tabs
+        tabPlaylist: '再生リスト',
+
+        // Input Section
+
         // Input Section
         inputTitle: 'リンク入力',
         inputPlaceholder: 'SUNOの曲リンク（1行に1曲）または短縮リンク（s.suno.ai/xxxxx）を入力してください',
@@ -150,6 +155,11 @@ const translations = {
         appName: 'SUNO Playlist Player',
         appTitle: 'SUNO Playlist',
         appDescription: 'Play SUNO music continuously',
+
+        // Tabs
+        tabPlaylist: 'Playlist',
+
+        // Input Section
 
         // Input Section
         inputTitle: 'Add Links',
@@ -294,6 +304,11 @@ const translations = {
         appTitle: 'SUNO 播放列表',
         appDescription: '连续播放SUNO音乐',
 
+        // Tabs
+        tabPlaylist: '播放列表',
+
+        // Input Section
+
         // Input Section
         inputTitle: '添加链接',
         inputPlaceholder: '粘贴SUNO歌曲链接（每行一首）或短链接（s.suno.ai/xxxxx）',
@@ -436,6 +451,11 @@ const translations = {
         appName: 'SUNO 재생목록 플레이어',
         appTitle: 'SUNO 재생목록',
         appDescription: 'SUNO 음악을 연속 재생',
+
+        // Tabs
+        tabPlaylist: '재생 목록',
+
+        // Input Section
 
         // Input Section
         inputTitle: '링크 추가',
