@@ -550,9 +550,6 @@ class SUNOPlaylist {
                 this.toggleHistoryModal();
             }
         });
-
-        // Restore last playlist
-        setTimeout(() => this.restoreLastPlaylist(), 500);
     }
 
     // Setup offline detection
