@@ -139,6 +139,8 @@ const translations = {
         themeDefault: 'デフォルト',
         themeTabby: '茶トラ猫',
         openInSuno: 'SUNOで開く',
+        donateSupport: '開発を応援する',
+        donateTreat: '🐾 猫におやつをあげる',
 
         // System Toasts & Dialogs
         repeatNone: 'リピートオフ',
@@ -266,6 +268,8 @@ const translations = {
         toastUpdated: 'App updated',
         toastInstalled: 'App installed!',
         openInSuno: 'Open in SUNO',
+        donateSupport: 'Support Developer',
+        donateTreat: '🐾 Buy Cat a Treat',
 
         // Error Messages
         errorEmpty: 'Playlist is empty',
@@ -418,6 +422,8 @@ const translations = {
         toastUpdated: '应用已更新',
         toastInstalled: '应用已安装！',
         openInSuno: '在 SUNO 中打开',
+        donateSupport: '支持开发者',
+        donateTreat: '🐾 给猫咪买零食',
 
         // Error Messages
         errorEmpty: '播放列表为空',
@@ -570,6 +576,8 @@ const translations = {
         toastUpdated: '앱이 업데이트되었습니다',
         toastInstalled: '앱이 설치되었습니다!',
         openInSuno: 'SUNO에서 열기',
+        donateSupport: '개발자 응원하기',
+        donateTreat: '🐾 고양이 간식 주기',
 
         // Error Messages
         errorEmpty: '재생목록이 비어있습니다',

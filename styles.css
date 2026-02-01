@@ -2383,3 +2383,122 @@ body {
 .language-option:active {
     transform: scale(0.98);
 }
+
+/* ===================================
+   Donate Buttons
+   =================================== */
+.donate-btn-float {
+    position: fixed;
+    right: calc(var(--spacing-md) + 60px);
+    /* help-btn の隣 */
+    bottom: var(--spacing-md);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 1.4rem;
+}
+
+.donate-btn-float:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+    background: #ff6b35;
+    color: white;
+}
+
+.donate-btn-float:active {
+    transform: scale(0.9);
+}
+
+[data-theme="tabby"] .donate-btn-float {
+    background: #e67e22;
+    color: white;
+}
+
+[data-theme="tabby"] .donate-btn-float:hover {
+    background: #ff8c00;
+    box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+}
+
+[data-theme="tabby"] .donate-btn-float .donate-icon::before {
+    content: '🐾';
+    font-size: 1.4rem;
+}
+
+[data-theme="tabby"] .donate-btn-float .donate-icon {
+    font-size: 0;
+}
+
+.help-footer {
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    margin-top: var(--spacing-lg);
+}
+
+.donate-thanks {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.donate-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--accent-gradient);
+    border-radius: var(--radius-pill);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.donate-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
+    filter: brightness(1.1);
+}
+
+[data-theme="tabby"] .help-footer {
+    border-top-color: rgba(230, 126, 34, 0.2);
+}
+
+/* Nyaa! Animation */
+@keyframes nyaa-float {
+    0% {
+        transform: translateY(0) opacity(0);
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-50px) opacity(0);
+    }
+}
+
+.nyaa-effect {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #e67e22;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: nyaa-float 1.5s ease-out forwards;
+}

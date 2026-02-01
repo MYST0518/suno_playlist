@@ -442,7 +442,9 @@ class SUNOPlaylist {
             historyModal: document.getElementById('historyModal'),
             historyList: document.getElementById('historyList'),
             closeHistoryBtn: document.getElementById('closeHistoryBtn'),
-            openSunoBtn: document.getElementById('openSunoBtn')
+            openSunoBtn: document.getElementById('openSunoBtn'),
+            donateBtn: document.getElementById('donateBtn'),
+            helpDonateBtn: document.getElementById('helpDonateBtn')
         };
 
         // Loading state
@@ -486,6 +488,8 @@ class SUNOPlaylist {
         this.elements.progressBar.addEventListener('click', (e) => this.seek(e));
         this.elements.helpBtn.addEventListener('click', () => this.toggleHelpModal());
         this.elements.closeHelpBtn.addEventListener('click', () => this.toggleHelpModal());
+        this.elements.donateBtn?.addEventListener('click', (e) => this.handleDonate(e));
+        this.elements.helpDonateBtn?.addEventListener('click', (e) => this.handleDonate(e));
 
         // Re-add click listener as fallback/safety for the main link
         this.elements.openSunoBtn?.addEventListener('click', (e) => {
@@ -1133,6 +1137,26 @@ class SUNOPlaylist {
     toggleHistoryModal() { this.elements.historyModal.classList.toggle('show'); }
     updateControlIcons() {
         this.elements.playIcon.textContent = this.isPlaying ? window.themeManager.getIcon('pause') : window.themeManager.getIcon('play');
+    }
+
+    handleDonate(e) {
+        if (e) e.preventDefault();
+        const isTabby = document.documentElement.getAttribute('data-theme') === 'tabby';
+        const nyaaText = isTabby ? 'Nyaa! 🐾' : 'Thanks! ❤️';
+        this.createNyaaEffect(nyaaText);
+        const donateUrl = 'https://www.buymeacoffee.com/miya_myst';
+        setTimeout(() => { window.open(donateUrl, '_blank'); }, 800);
+    }
+
+    createNyaaEffect(text) {
+        const effect = document.createElement('div');
+        effect.className = 'nyaa-effect';
+        effect.textContent = text;
+        effect.style.left = '50%';
+        effect.style.top = '50%';
+        effect.style.transform = 'translate(-50%, -50%)';
+        document.body.appendChild(effect);
+        setTimeout(() => { effect.remove(); }, 1500);
     }
 }
 
