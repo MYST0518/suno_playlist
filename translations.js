@@ -68,27 +68,30 @@ const translations = {
         actionMute: 'ミュート',
 
         // Usage Guide
-        usageCreateTitle: 'プレイリストの作り方',
-        usageCreateStep1: 'SUNOのリンクを入力欄にペースト（1行に1曲）',
-        usageCreateStep2: '「プレイリスト作成」ボタンをクリック',
-        usageCreateStep3: '自動的にタイトルとアーティスト名を取得します',
+        usageCreateTitle: '🎵 プレイリストの作り方',
+        usageCreateStep1: 'SUNOの曲URL（suno.com/song/...）や、SNS共有用の短縮リンク（s.suno.ai/...）を貼り付けます。複数曲ある場合は、1行に1曲ずつ入力してください。',
+        usageCreateStep2: '「プレイリスト作成」ボタンを押すと、自動的に楽曲名とアーティスト名、サムネイルを取得します',
+        usageCreateStep3: 'プレイリストの曲をクリックすると再生が始まります。ドラッグで曲順の入れ替えも可能です',
 
-        usageShareTitle: '共有する',
-        usageShareDesc: '🔗ボタンから共有方法を選択：',
-        usageShareTwitter: 'ツイートで共有',
-        usageShareLine: 'LINEで送信',
-        usageShareFacebook: 'Facebookに投稿',
-        usageShareUrl: '短縮URLをコピー',
+        usageShareTitle: '🔗 プレイリストを共有',
+        usageShareDesc: '作成したプレイリストを短縮URLとして共有できます：',
+        usageShareTwitter: 'X (Twitter) でフォロワーに教える',
+        usageShareLine: 'LINEのトークルームで共有',
+        usageShareFacebook: 'Facebookに投稿してシェア',
+        usageShareUrl: 'プレイリスト専用の短縮URLをコピー',
 
-        usageSaveTitle: '保存と復元',
-        usageSaveDownload: 'プレイリストをJSONファイルで保存',
-        usageSaveImport: '保存したJSONファイルを読み込み',
-        usageSaveHistory: '最近のプレイリスト10件を表示',
+        usageSaveTitle: '💾 データの保存',
+        usageSaveDownload: '作成したリストをJSONファイルとして保存（バックアップ）できます',
+        usageSaveImport: '保存したJSONファイルを読み込んでプレイリストを復元します',
+        usageSaveHistory: '最近作成したリストは履歴（最大10件）に自動保存されます',
 
-        usageFeaturesTitle: '便利な機能',
-        usageFeatureShuffle: 'ランダム順で再生',
-        usageFeatureRepeat: '全曲/1曲/なし を切替',
-        usageFeatureFavorite: '履歴から星マークで保存',
+        usageFeaturesTitle: '🎮 便利な特長・機能',
+        usageFeatureShuffle: '🔀 シャッフル: 楽曲をランダムな順番で再生します',
+        usageFeatureRepeat: '🔁 リピート: 全曲/1曲のみ/オフを切り替え可能です',
+        usageFeatureFavorite: '⭐ お気に入り: 履歴のリストを星マークで固定できます',
+
+        usageFeatureOpenInSuno: '🔗 SUNO公式サイト: 曲名横の🔗から公式ページを即座に開けます',
+        usageFeatureTheme: '🐱 テーマ切替: デフォルトと茶トラ猫テーマを自由に選べます',
 
         // History Modal
         historyTitle: 'プレイリスト履歴',
@@ -135,6 +138,7 @@ const translations = {
         theme: 'テーマ',
         themeDefault: 'デフォルト',
         themeTabby: '茶トラ猫',
+        openInSuno: 'SUNOで開く',
 
         // System Toasts & Dialogs
         repeatNone: 'リピートオフ',
@@ -216,27 +220,29 @@ const translations = {
         actionMute: 'Mute',
 
         // Usage Guide
-        usageCreateTitle: 'How to Create Playlist',
-        usageCreateStep1: 'Paste SUNO links (one per line)',
-        usageCreateStep2: 'Click "Create Playlist" button',
-        usageCreateStep3: 'Track info will be loaded automatically',
+        usageCreateTitle: '🎵 How to Build Your Playlist',
+        usageCreateStep1: 'Paste SUNO song URLs (suno.com/song/...) or social short links (s.suno.ai/...). Enter one link per line if you have multiple songs.',
+        usageCreateStep2: 'Click "Create Playlist" to auto-fetch titles, artists, and artworks.',
+        usageCreateStep3: 'Click any track to play. You can drag and drop items to reorder your list.',
 
-        usageShareTitle: 'Share Playlist',
-        usageShareDesc: 'Choose sharing method from 🔗 button:',
-        usageShareTwitter: 'Share via Tweet',
-        usageShareLine: 'Send via LINE',
-        usageShareFacebook: 'Post to Facebook',
-        usageShareUrl: 'Copy short URL',
+        usageShareTitle: '🔗 Sharing your Playlist',
+        usageShareDesc: 'Share your custom music collection with a shortened URL:',
+        usageShareTwitter: 'Share with your followers on X (Twitter)',
+        usageShareLine: 'Send via LINE app chat',
+        usageShareFacebook: 'Post and share on Facebook',
+        usageShareUrl: 'Copy the unique shortened playlist URL',
 
-        usageSaveTitle: 'Save & Restore',
-        usageSaveDownload: 'Download playlist as JSON file',
-        usageSaveImport: 'Load saved JSON file',
-        usageSaveHistory: 'View recent 10 playlists',
+        usageSaveTitle: '💾 Backup & History',
+        usageSaveDownload: 'Save your current playlist as a JSON file for backup.',
+        usageSaveImport: 'Import a previously saved JSON file to restore your tracks.',
+        usageSaveHistory: 'Your last 10 playlists are automatically saved in history.',
 
-        usageFeaturesTitle: 'Features',
-        usageFeatureShuffle: 'Play in random order',
-        usageFeatureRepeat: 'Toggle all/one/none',
-        usageFeatureFavorite: 'Star to save from history',
+        usageFeaturesTitle: '🎮 Premium Features',
+        usageFeatureShuffle: '🔀 Shuffle: Enjoy your songs in a random sequence.',
+        usageFeatureRepeat: '🔁 Repeat: Toggle between All, One, or No repeat.',
+        usageFeatureFavorite: '⭐ History Favorites: Star playlists in history to keep them.',
+        usageFeatureOpenInSuno: '🔗 Open in SUNO: Access the official page directly via the 🔗 button.',
+        usageFeatureTheme: '🐱 Themes: Switch between Default and Tabby Cat styles.',
 
         // History Modal
         historyTitle: 'Playlist History',
@@ -259,6 +265,7 @@ const translations = {
         toastLoading: 'Loading...',
         toastUpdated: 'App updated',
         toastInstalled: 'App installed!',
+        openInSuno: 'Open in SUNO',
 
         // Error Messages
         errorEmpty: 'Playlist is empty',
@@ -364,27 +371,30 @@ const translations = {
         actionMute: '静音',
 
         // Usage Guide
-        usageCreateTitle: '如何创建播放列表',
-        usageCreateStep1: '粘贴SUNO链接（每行一首）',
-        usageCreateStep2: '点击"创建播放列表"按钮',
-        usageCreateStep3: '将自动加载歌曲信息',
+        usageCreateTitle: '🎵 制作播放列表',
+        usageCreateStep1: '将 SUNO 歌曲完整链接 (suno.com/song/...) 或社交分享短链接 (s.suno.ai/...) 粘贴到输入框中。每行输入一个链接。',
+        usageCreateStep2: '点击“制作播放列表”按钮，系统将自动获取标题、艺术家和封面图',
+        usageCreateStep3: '点击列表中的曲目即可播放。您可以拖拽条目来重新排序',
 
-        usageShareTitle: '分享播放列表',
-        usageShareDesc: '从🔗按钮选择分享方式：',
-        usageShareTwitter: '通过推文分享',
-        usageShareLine: '通过LINE发送',
-        usageShareFacebook: '发布到Facebook',
-        usageShareUrl: '复制短链接',
+        usageShareTitle: '🔗 分享播放列表',
+        usageShareDesc: '生成短链接，轻松分享您的专属音乐收藏：',
+        usageShareTwitter: '在 X (Twitter) 上分享给您的关注者',
+        usageShareLine: '通过 LINE 应用发送列表链接',
+        usageShareFacebook: '发布到 Facebook 动态进行分享',
+        usageShareUrl: '复制此播放列表的唯一缩短链接',
 
-        usageSaveTitle: '保存与恢复',
-        usageSaveDownload: '将播放列表下载为JSON文件',
-        usageSaveImport: '加载已保存的JSON文件',
-        usageSaveHistory: '查看最近10个播放列表',
+        usageSaveTitle: '💾 备份与历史',
+        usageSaveDownload: '将当前列表导出为 JSON 文件进行本地备份',
+        usageSaveImport: '导入之前保存的 JSON 文件以恢复您的播放列表',
+        usageSaveHistory: '最近制作的 10 个播放列表将自动保存在历史记录中',
 
-        usageFeaturesTitle: '功能',
-        usageFeatureShuffle: '随机顺序播放',
-        usageFeatureRepeat: '切换全部/单曲/关闭',
-        usageFeatureFavorite: '从历史中加星收藏',
+        usageFeaturesTitle: '🎮 进阶功能',
+        usageFeatureShuffle: '🔀 随机播放：以随机顺序享受您的音乐',
+        usageFeatureRepeat: '🔁 循环模式：在 全部循环/单曲循环/不循环 之间切换',
+        usageFeatureFavorite: '⭐ 收藏记录：在历史记录中点击星号永久保存列表',
+
+        usageFeatureOpenInSuno: '🔗 在 SUNO 中打开：点击 🔗 按钮即可直达官方详情页',
+        usageFeatureTheme: '🐱 主题挑选：在默认与茶虎猫主题间自由切换',
 
         // History Modal
         historyTitle: '播放列表历史',
@@ -407,6 +417,7 @@ const translations = {
         toastLoading: '加载中...',
         toastUpdated: '应用已更新',
         toastInstalled: '应用已安装！',
+        openInSuno: '在 SUNO 中打开',
 
         // Error Messages
         errorEmpty: '播放列表为空',
@@ -512,27 +523,30 @@ const translations = {
         actionMute: '음소거',
 
         // Usage Guide
-        usageCreateTitle: '재생목록 만드는 방법',
-        usageCreateStep1: 'SUNO 링크 붙여넣기 (한 줄에 하나씩)',
-        usageCreateStep2: '"재생목록 만들기" 버튼 클릭',
-        usageCreateStep3: '노래 정보가 자동으로 로드됩니다',
+        usageCreateTitle: '🎵 플레이리스트 만들기',
+        usageCreateStep1: 'SUNO 곡 사이트 주소(suno.com/song/...)나 SNS 공유용 단축 주소(s.suno.ai/...)를 붙여넣으세요. 여러 곡일 경우 한 줄에 하나씩 입력해 주세요.',
+        usageCreateStep2: '「플레이리스트 작성」 버튼을 누르면 제목, 아티스트, 썸네일을 자동으로 로드합니다',
+        usageCreateStep3: '목록의 곡을 클릭하면 재생이 시작됩니다. 드래그하여 순서를 변경할 수 있습니다',
 
-        usageShareTitle: '재생목록 공유',
-        usageShareDesc: '🔗 버튼에서 공유 방법 선택:',
-        usageShareTwitter: '트윗으로 공유',
-        usageShareLine: 'LINE으로 전송',
-        usageShareFacebook: 'Facebook에 게시',
-        usageShareUrl: '단축 URL 복사',
+        usageShareTitle: '🔗 플레이리스트 공유하기',
+        usageShareDesc: '나만의 리스트를 단축 URL로 생성하여 공유해 보세요:',
+        usageShareTwitter: 'X(Twitter) 팔로워들에게 나의 리스트 공유',
+        usageShareLine: 'LINE 메신저를 통해 앱으로 바로 전송',
+        usageShareFacebook: 'Facebook 게시물로 공유하기',
+        usageShareUrl: '이 플레이리스트 전용 단축 URL 복사하기',
 
-        usageSaveTitle: '저장 및 복원',
-        usageSaveDownload: '재생목록을 JSON 파일로 다운로드',
-        usageSaveImport: '저장된 JSON 파일 불러오기',
-        usageSaveHistory: '최근 재생목록 10개 보기',
+        usageSaveTitle: '💾 백업 및 히스토리',
+        usageSaveDownload: '현재 리스트를 JSON 파일로 내보내어 안전하게 백업합니다',
+        usageSaveImport: '저장된 JSON 파일을 불러와 플레이리스트를 즉시 복원합니다',
+        usageSaveHistory: '최근에 만든 리스트 10개까지 히스토리에 자동 저장됩니다',
 
-        usageFeaturesTitle: '기능',
-        usageFeatureShuffle: '무작위 순서로 재생',
-        usageFeatureRepeat: '전체/한 곡/없음 전환',
-        usageFeatureFavorite: '기록에서 별표로 저장',
+        usageFeaturesTitle: '🎮 편리한 기능',
+        usageFeatureShuffle: '🔀 셔플: 곡을 무작위 순서로 재생하여 즐깁니다',
+        usageFeatureRepeat: '🔁 반복 모드: 전체/한 곡/반복 안 함을 자유롭게 전환합니다',
+        usageFeatureFavorite: '⭐ 즐겨찾기: 히스토리에서 마음에 드는 리스트를 별표로 고정합니다',
+
+        usageFeatureOpenInSuno: '🔗 SUNO에서 열기: 제목 옆의 🔗 버튼으로 공식 페이지에 즉시 접속합니다',
+        usageFeatureTheme: '🐱 테마 변경: 기본 또는 치즈 고양이 테마로 디자인을 바꿉니다',
 
         // History Modal
         historyTitle: '재생목록 기록',
@@ -555,6 +569,7 @@ const translations = {
         toastLoading: '로딩 중...',
         toastUpdated: '앱이 업데이트되었습니다',
         toastInstalled: '앱이 설치되었습니다!',
+        openInSuno: 'SUNO에서 열기',
 
         // Error Messages
         errorEmpty: '재생목록이 비어있습니다',

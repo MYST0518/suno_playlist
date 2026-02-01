@@ -442,8 +442,7 @@ class SUNOPlaylist {
             historyModal: document.getElementById('historyModal'),
             historyList: document.getElementById('historyList'),
             closeHistoryBtn: document.getElementById('closeHistoryBtn'),
-            openSunoBtn: document.getElementById('openSunoBtn'),
-            dynamicBg: document.getElementById('dynamicBg')
+            openSunoBtn: document.getElementById('openSunoBtn')
         };
 
         // Loading state
@@ -972,7 +971,7 @@ class SUNOPlaylist {
                         <div class="item-artist">${this.escapeHtml(track.artist)}</div>
                     </div>
                     <div class="item-actions">
-                        <a href="https://suno.com/song/${track.uuid}" target="_blank" rel="noopener noreferrer" class="action-btn-sm link-btn-sm" onclick="event.stopPropagation(); window.open('https://suno.com/song/${track.uuid}', '_blank'); return false;" title="SUNOで開く">🔗</a>
+                        <a href="https://suno.com/song/${track.uuid}" target="_blank" rel="noopener noreferrer" class="action-btn-sm link-btn-sm" onclick="event.stopPropagation(); window.open('https://suno.com/song/${track.uuid}', '_blank'); return false;" title="SUNOで開く">🔗 SUNO</a>
                     </div>
                 </div>
             `;
@@ -1022,22 +1021,10 @@ class SUNOPlaylist {
                     this.elements.openSunoBtn.style.display = 'none';
                 }
             }
-
-            this.updateBackground(track.thumbnail);
         }
     }
 
-    updateBackground(imgUrl) {
-        if (this.elements.dynamicBg) {
-            if (imgUrl) {
-                this.elements.dynamicBg.style.backgroundImage = `url(${imgUrl})`;
-                this.elements.dynamicBg.style.opacity = '1';
-            } else {
-                this.elements.dynamicBg.style.backgroundImage = 'none';
-                this.elements.dynamicBg.style.opacity = '0';
-            }
-        }
-    }
+    // Background update removed - clashes with themes
 
 
     openInSuno(uuid) {
