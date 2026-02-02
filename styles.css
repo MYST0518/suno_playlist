@@ -2488,6 +2488,31 @@ body {
         margin: 0;
     }
 
+    /* Show mobile action buttons in header */
+    .mobile-action-buttons {
+        display: flex !important;
+        gap: 8px;
+    }
+
+    .mobile-action-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.3rem;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-action-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+    }
+
     /* Toggle button: Larger for touch */
     .toggle-icon-btn {
         min-width: 44px;
@@ -2681,6 +2706,12 @@ body {
 /* ===================================
    Donate & Help Floating Buttons
    =================================== */
+/* Mobile Action Buttons in Header (hidden on desktop) */
+.mobile-action-buttons {
+    display: none;
+    /* PC版では非表示 */
+}
+
 /* Desktop: Hide container, use fixed positioning */
 .floating-buttons-container {
     display: none;

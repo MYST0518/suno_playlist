@@ -470,7 +470,9 @@ class SUNOPlaylist {
             donateModal: document.getElementById('donateModal'),
             closeDonateBtn: document.getElementById('closeDonateBtn'),
             bmacLink: document.getElementById('bmacLink'),
-            wishlistLink: document.getElementById('wishlistLink')
+            wishlistLink: document.getElementById('wishlistLink'),
+            mobileDonateBtn: document.getElementById('mobileDonateBtn'),
+            mobileHelpBtn: document.getElementById('mobileHelpBtn')
         };
 
         // Loading state
@@ -516,8 +518,10 @@ class SUNOPlaylist {
         this.elements.volumeSlider.addEventListener('input', (e) => this.setVolume(e.target.value));
         this.elements.progressBar.addEventListener('click', (e) => this.seek(e));
         this.elements.helpBtn.addEventListener('click', () => this.toggleHelpModal());
+        this.elements.mobileHelpBtn?.addEventListener('click', () => this.toggleHelpModal());
         this.elements.closeHelpBtn.addEventListener('click', () => this.toggleHelpModal());
         this.elements.donateBtn?.addEventListener('click', (e) => this.handleDonate(e));
+        this.elements.mobileDonateBtn?.addEventListener('click', (e) => this.handleDonate(e));
         this.elements.helpDonateBtn?.addEventListener('click', (e) => this.handleDonate(e));
 
         // Donate modal listeners
