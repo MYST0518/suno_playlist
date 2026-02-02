@@ -2480,6 +2480,31 @@ body {
         margin-top: 40px;
     }
 
+    /* Toggle button: Larger for touch */
+    .toggle-icon-btn {
+        min-width: 44px;
+        height: 44px;
+        padding: 8px 12px;
+        font-size: 1.3rem;
+    }
+
+    /* Volume slider: Thicker for touch */
+    #volumeSlider {
+        height: 8px;
+        width: 100px;
+    }
+
+    #volumeSlider::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+    }
+
+    #volumeSlider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+    }
+
+
     /* Theme-specific mobile backgrounds */
     [data-theme="sakura"] body::before {
         background-position: left 15% center !important;
