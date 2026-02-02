@@ -420,6 +420,8 @@ class SUNOPlaylist {
             linksInput: document.getElementById('linksInput'),
             loadBtn: document.getElementById('loadBtn'),
             toggleInputBtn: document.getElementById('toggleInputBtn'),
+            toggleInputIcon: document.getElementById('toggleInputIcon'),
+            toggleInputText: document.getElementById('toggleInputText'),
             inputContent: document.getElementById('inputContent'),
             shareBtn: document.getElementById('shareBtn'),
             shareDropdown: document.getElementById('shareDropdown'),
@@ -594,6 +596,9 @@ class SUNOPlaylist {
 
         // Check URL for shared playlist
         this.loadFromURL();
+
+        // Collapse input section if this is a shared playlist
+        this.checkAndCollapseIfShared();
 
         // History button event listeners
         this.elements.historyBtn.addEventListener('click', () => this.toggleHistoryModal());
@@ -967,18 +972,33 @@ class SUNOPlaylist {
 
     toggleInputSection() {
         const content = this.elements.inputContent;
+        const icon = this.elements.toggleInputIcon;
+        const text = this.elements.toggleInputText;
         const btn = this.elements.toggleInputBtn;
 
         if (content.style.display === 'none') {
             // 展開
             content.style.display = 'block';
-            btn.textContent = '▲';
+            icon.textContent = '▲';
+            text.textContent = 'リンクを隠す';
             btn.title = '折りたたむ';
         } else {
             // 折りたたむ
             content.style.display = 'none';
-            btn.textContent = '▼';
+            icon.textContent = '▼';
+            text.textContent = 'リンクを表示';
             btn.title = '展開する';
+        }
+    }
+
+    checkAndCollapseIfShared() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('p')) {
+            // 共有リンクの場合、デフォルトで閉じる
+            this.elements.inputContent.style.display = 'none';
+            this.elements.toggleInputIcon.textContent = '▼';
+            this.elements.toggleInputText.textContent = 'リンクを表示';
+            this.elements.toggleInputBtn.title = '展開する';
         }
     }
 
