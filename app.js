@@ -1180,7 +1180,16 @@ class SUNOPlaylist {
         if (this.isPlaying) this.play();
     }
 
-    setVolume(v) { this.elements.audioPlayer.volume = v / 100; }
+    setVolume(v) {
+        this.elements.audioPlayer.volume = v / 100;
+        // Update slider background to show filled portion
+        const percentage = v;
+        this.elements.volumeSlider.style.background = `linear-gradient(to right, 
+            var(--accent-primary) 0%, 
+            var(--accent-primary) ${percentage}%, 
+            rgba(255, 255, 255, 0.2) ${percentage}%, 
+            rgba(255, 255, 255, 0.2) 100%)`;
+    }
     seek(e) {
         const rect = this.elements.progressBar.getBoundingClientRect();
         const percent = (e.clientX - rect.left) / rect.width;
