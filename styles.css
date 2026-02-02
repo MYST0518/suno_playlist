@@ -2678,6 +2678,55 @@ body {
     transform: translateY(0);
 }
 
+/* Ranking Specific Styles */
+.ranking-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
+}
+
+.ranking-tab {
+    padding: 6px 16px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.ranking-tab.active {
+    background: var(--accent-gradient);
+    border-color: transparent;
+    color: white;
+}
+
+.ranking-badge {
+    background: var(--accent-gradient);
+    color: white;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.ranking-play-count {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.loading-ranking {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+
 .language-option {
     display: flex;
     align-items: center;

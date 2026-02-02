@@ -414,6 +414,8 @@ class SUNOPlaylist {
         this.playlist = [];
         this.currentIndex = 0;
         this.isPlaying = false;
+        this.playbackTimer = null;
+        this.recordedTracks = new Set(); // 1セッションにつき1回の記録用
 
         // DOM Elements
         this.elements = {
@@ -472,7 +474,11 @@ class SUNOPlaylist {
             bmacLink: document.getElementById('bmacLink'),
             wishlistLink: document.getElementById('wishlistLink'),
             mobileDonateBtn: document.getElementById('mobileDonateBtn'),
-            mobileHelpBtn: document.getElementById('mobileHelpBtn')
+            mobileHelpBtn: document.getElementById('mobileHelpBtn'),
+            rankingBtn: document.getElementById('rankingBtn'),
+            rankingModal: document.getElementById('rankingModal'),
+            rankingList: document.getElementById('rankingList'),
+            closeRankingBtn: document.getElementById('closeRankingBtn')
         };
 
         // Loading state
@@ -518,6 +524,7 @@ class SUNOPlaylist {
         this.elements.volumeSlider.addEventListener('input', (e) => this.setVolume(e.target.value));
         this.elements.progressBar.addEventListener('click', (e) => this.seek(e));
         this.elements.helpBtn.addEventListener('click', () => this.toggleHelpModal());
+        this.elements.rankingBtn?.addEventListener('click', () => this.toggleRankingModal());
         this.elements.mobileHelpBtn?.addEventListener('click', () => this.toggleHelpModal());
         this.elements.closeHelpBtn.addEventListener('click', () => this.toggleHelpModal());
         this.elements.donateBtn?.addEventListener('click', (e) => this.handleDonate(e));
@@ -606,9 +613,17 @@ class SUNOPlaylist {
         // History button event listeners
         this.elements.historyBtn.addEventListener('click', () => this.toggleHistoryModal());
         this.elements.closeHistoryBtn.addEventListener('click', () => this.toggleHistoryModal());
+        this.elements.closeRankingBtn?.addEventListener('click', () => this.toggleRankingModal());
+
         this.elements.historyModal.addEventListener('click', (e) => {
             if (e.target === this.elements.historyModal) {
                 this.toggleHistoryModal();
+            }
+        });
+
+        this.elements.rankingModal?.addEventListener('click', (e) => {
+            if (e.target === this.elements.rankingModal) {
+                this.toggleRankingModal();
             }
         });
     }
@@ -1134,7 +1149,15 @@ class SUNOPlaylist {
         this.currentIndex = index;
         this.elements.audioPlayer.src = this.playlist[index].mp3Url;
         this.updateNowPlaying();
+        this.resetPlaybackTimer();
         this.renderPlaylist();
+    }
+
+    resetPlaybackTimer() {
+        if (this.playbackTimer) {
+            clearTimeout(this.playbackTimer);
+            this.playbackTimer = null;
+        }
     }
 
     togglePlay() { this.isPlaying ? this.pause() : this.play(); }
@@ -1143,14 +1166,20 @@ class SUNOPlaylist {
         this.elements.audioPlayer.play().then(() => {
             this.isPlaying = true;
             this.updateControlIcons();
-            // Ensure first update
             this.updateProgress();
+
+            // 10秒以上再生されたらカウント
+            this.resetPlaybackTimer();
+            this.playbackTimer = setTimeout(() => {
+                this.recordTrackPlay(this.playlist[this.currentIndex]);
+            }, 10000);
         });
     }
     pause() {
         this.elements.audioPlayer.pause();
         this.isPlaying = false;
         this.updateControlIcons();
+        this.resetPlaybackTimer(); // 一時停止したらカウント中断
     }
 
     playNext() {
@@ -1305,6 +1334,86 @@ class SUNOPlaylist {
         document.body.appendChild(effect);
         setTimeout(() => { effect.remove(); }, 1500);
     }
+
+    toggleRankingModal() {
+        if (!this.elements.rankingModal) return;
+        const isVisible = this.elements.rankingModal.classList.contains('show');
+        if (!isVisible) {
+            this.elements.rankingModal.classList.add('show');
+            this.fetchRanking();
+        } else {
+            this.elements.rankingModal.classList.remove('show');
+        }
+    }
+
+    async fetchRanking() {
+        if (!this.elements.rankingList) return;
+
+        try {
+            const response = await fetch('/api/ranking');
+            if (response.ok) {
+                const ranking = await response.json();
+                this.renderRanking(ranking);
+            } else {
+                this.elements.rankingList.innerHTML = '<div class="loading-ranking">ランキングの取得に失敗しました</div>';
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            this.elements.rankingList.innerHTML = '<div class="loading-ranking">エラーが発生しました</div>';
+        }
+    }
+
+    renderRanking(ranking) {
+        if (!ranking || ranking.length === 0) {
+            this.elements.rankingList.innerHTML = '<div class="loading-ranking">まだランキングデータがありません</div>';
+            return;
+        }
+
+        this.elements.rankingList.innerHTML = '';
+        ranking.forEach((track, index) => {
+            const item = document.createElement('div');
+            item.className = 'history-item'; // UI統一のため既存クラス流用
+            item.innerHTML = `
+                <div class="history-info">
+                    <img src="${track.artwork || ''}" class="history-thumb" onerror="this.src='fur.png'">
+                    <div class="history-details">
+                        <div class="history-name">${track.title}</div>
+                        <div class="history-meta">${track.artist}</div>
+                        <div class="ranking-play-count">🎧 ${track.playCount} plays</div>
+                    </div>
+                    <div class="ranking-badge">#${index + 1}</div>
+                </div>
+            `;
+            item.addEventListener('click', () => {
+                this.loadFromURL(new URL(track.url).searchParams.get('p'));
+                this.toggleRankingModal();
+            });
+            this.elements.rankingList.appendChild(item);
+        });
+    }
+
+    async recordTrackPlay(track) {
+        if (!track || !track.id) return;
+        if (this.recordedTracks.has(track.id)) return;
+
+        try {
+            await fetch('/api/track-play', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: track.id,
+                    title: track.title,
+                    artist: track.artist,
+                    artwork: track.artwork,
+                    url: window.location.href // 現在のプレイリスト再生用URLを保存
+                })
+            });
+            this.recordedTracks.add(track.id);
+        } catch (error) {
+            console.error('Failed to record play:', error);
+        }
+    }
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -197,6 +197,9 @@
                 <div class="playlist-header">
                     <h2><span data-i18n="playlistTitle">📜 プレイリスト</span></h2>
                     <div class="playlist-actions">
+                        <button id="rankingBtn" class="btn btn-secondary" title="ランキング">
+                            👑
+                        </button>
                         <button id="historyBtn" class="btn btn-secondary" title="履歴">
                             📜
                         </button>
@@ -389,6 +392,24 @@
                 </div>
                 <div class="history-list" id="historyList">
                     <!-- Dynamically populated -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Ranking Modal -->
+        <div class="history-modal" id="rankingModal">
+            <div class="history-content">
+                <div class="history-header">
+                    <h3 data-i18n="rankingTitle">👑 SUNOCAT 人気ランキング</h3>
+                    <button class="btn-close" id="closeRankingBtn">✕</button>
+                </div>
+                <div class="ranking-tabs">
+                    <button class="ranking-tab active" data-period="all">累計</button>
+                    <!-- 将来的に本日分などを追加可能 -->
+                </div>
+                <div class="history-list" id="rankingList">
+                    <!-- Dynamically populated -->
+                    <div class="loading-ranking">読み込み中...</div>
                 </div>
             </div>
         </div>
