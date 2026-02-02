@@ -504,38 +504,37 @@ body::before {
     display: flex;
     align-items: center;
     gap: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-}
-
-
-.input-title-wrapper:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.toggle-text {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.3);
-    color: var(--text-primary);
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    white-space: nowrap;
-}
-
-.toggle-icon {
-    font-size: 1rem;
-    min-width: 20px;
-    text-align: center;
 }
 
 .input-title {
     font-size: 1rem;
+    font-weight: 500;
 }
+
+.toggle-icon-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+}
+
+.toggle-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.toggle-icon-btn span {
+    transition: transform 0.3s ease;
+}
+
 
 .input-content {
     transition: all 0.3s ease;
