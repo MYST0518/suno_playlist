@@ -108,15 +108,20 @@
         <!-- Main Content -->
         <main class="main-content">
             <!-- Input Section -->
-            <section class="input-section">
+            <section class="input-section" id="inputSection">
                 <div class="input-header">
-                    <h2><span data-i18n="inputTitle">📋 リンク入力</span></h2>
+                    <h2>
+                        <span data-i18n="inputTitle">📋 リンク入力</span>
+                        <button id="toggleInputBtn" class="btn-icon" title="折りたたむ">▲</button>
+                    </h2>
                     <button id="loadBtn" class="btn btn-primary">
                         <span>▶</span> <span data-i18n="loadPlaylistBtn">プレイリスト作成</span>
                     </button>
                 </div>
-                <textarea id="linksInput" data-i18n="inputPlaceholder"
-                    placeholder="SUNOのリンクをペースト（1行に1曲）&#10;&#10;例:&#10;https://suno.com/s/eeWo6s0axFZ7PYG6&#10;https://suno.com/song/36b02f3a-1d01-434e-a0a8-8ee9aa7fd693"></textarea>
+                <div class="input-content" id="inputContent">
+                    <textarea id="linksInput" data-i18n="inputPlaceholder"
+                        placeholder="SUNOのリンクをペースト（1行に1曲）&#10;&#10;例:&#10;https://suno.com/s/eeWo6s0axFZ7PYG6&#10;https://suno.com/song/36b02f3a-1d01-434e-a0a8-8ee9aa7fd693"></textarea>
+                </div>
             </section>
 
             <!-- Player Section -->

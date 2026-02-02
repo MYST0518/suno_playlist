@@ -419,6 +419,8 @@ class SUNOPlaylist {
         this.elements = {
             linksInput: document.getElementById('linksInput'),
             loadBtn: document.getElementById('loadBtn'),
+            toggleInputBtn: document.getElementById('toggleInputBtn'),
+            inputContent: document.getElementById('inputContent'),
             shareBtn: document.getElementById('shareBtn'),
             shareDropdown: document.getElementById('shareDropdown'),
             shareTwitter: document.getElementById('shareTwitter'),
@@ -493,6 +495,7 @@ class SUNOPlaylist {
     init() {
         // Event Listeners
         this.elements.loadBtn.addEventListener('click', () => this.loadPlaylist());
+        this.elements.toggleInputBtn?.addEventListener('click', () => this.toggleInputSection());
         this.elements.shareBtn?.addEventListener('click', () => this.toggleShareDropdown());
         this.elements.shareTwitter?.addEventListener('click', () => this.shareToTwitter());
         this.elements.shareLine?.addEventListener('click', () => this.shareToLine());
@@ -962,6 +965,23 @@ class SUNOPlaylist {
         window.history.replaceState({}, '', `${window.location.pathname}?p=${compressed}`);
     }
 
+    toggleInputSection() {
+        const content = this.elements.inputContent;
+        const btn = this.elements.toggleInputBtn;
+
+        if (content.style.display === 'none') {
+            // 展開
+            content.style.display = 'block';
+            btn.textContent = '▲';
+            btn.title = '折りたたむ';
+        } else {
+            // 折りたたむ
+            content.style.display = 'none';
+            btn.textContent = '▼';
+            btn.title = '展開する';
+        }
+    }
+
     toggleShareDropdown() {
         this.elements.shareDropdown?.classList.toggle('show');
     }
@@ -984,15 +1004,18 @@ class SUNOPlaylist {
 
     async shareToTwitter() {
         const url = await this.getShareUrl();
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank');
+        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent('🎵 Check out this playlist!')}`, '_blank');
+        this.elements.shareDropdown?.classList.remove('show'); // 自動で閉じる
     }
     async shareToLine() {
         const url = await this.getShareUrl();
         window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}`, '_blank');
+        this.elements.shareDropdown?.classList.remove('show'); // 自動で閉じる
     }
     async shareToFacebook() {
         const url = await this.getShareUrl();
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        this.elements.shareDropdown?.classList.remove('show'); // 自動で閉じる
     }
     async copyShareUrl() {
         const url = await this.getShareUrl();

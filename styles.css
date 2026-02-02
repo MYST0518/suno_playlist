@@ -515,7 +515,31 @@ body::before {
 .input-header h2 {
     font-size: 1rem;
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
+
+.btn-icon {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-icon:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
+
+.input-content {
+    transition: all 0.3s ease;
+}
+
 
 textarea {
     width: 100%;
@@ -2398,23 +2422,26 @@ body {
         font-size: 0.9rem;
     }
 
-    /* Floating Buttons: More subtle on mobile */
+    /* Floating Buttons: Static positioning on mobile (not following scroll) */
     .donate-btn-float,
     .help-btn {
+        position: static;
+        /* スクロールに追従しない */
+        display: inline-flex;
         width: 48px;
         height: 48px;
         font-size: 1.4rem;
-        bottom: calc(20px + env(safe-area-inset-bottom));
         opacity: 0.7;
-        /* Make them less distracting */
+        margin: 8px;
     }
 
-    .donate-btn-float {
-        right: 78px;
-    }
-
-    .help-btn {
-        right: 20px;
+    /* Mobile button container at bottom */
+    .floating-buttons-container {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        padding: 20px;
+        margin-top: 40px;
     }
 
     /* Theme-specific mobile backgrounds */
