@@ -2458,26 +2458,34 @@ body {
         font-size: 0.9rem;
     }
 
-    /* Floating Buttons: Static positioning on mobile (not following scroll) */
-    .donate-btn-float,
-    .help-btn {
+    /* Mobile: Show container, hide fixed buttons */
+    .floating-buttons-container {
+        display: flex;
+        /* スマホ版では表示 */
+        justify-content: center;
+        gap: 16px;
+        padding: 20px;
+        margin-top: 40px;
+    }
+
+    /* Hide the fixed positioned buttons on mobile */
+    body>.donate-btn-float,
+    body>.help-btn {
+        display: none !important;
+        /* 固定ボタンを非表示 */
+    }
+
+    /* Buttons inside container: Static positioning */
+    .floating-buttons-container .donate-btn-float,
+    .floating-buttons-container .help-btn {
         position: static;
         /* スクロールに追従しない */
         display: inline-flex;
         width: 48px;
         height: 48px;
         font-size: 1.4rem;
-        opacity: 0.7;
-        margin: 8px;
-    }
-
-    /* Mobile button container at bottom */
-    .floating-buttons-container {
-        display: flex;
-        justify-content: center;
-        gap: 16px;
-        padding: 20px;
-        margin-top: 40px;
+        opacity: 0.8;
+        margin: 0;
     }
 
     /* Toggle button: Larger for touch */
@@ -2673,6 +2681,12 @@ body {
 /* ===================================
    Donate & Help Floating Buttons
    =================================== */
+/* Desktop: Hide container, use fixed positioning */
+.floating-buttons-container {
+    display: none;
+    /* PC版では非表示 */
+}
+
 .donate-btn-float,
 .help-btn {
     position: fixed;
