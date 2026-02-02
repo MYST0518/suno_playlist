@@ -184,16 +184,8 @@
 /* Cat Ears */
 [data-theme="tabby"] .player-section::before,
 [data-theme="tabby"] .player-section::after {
-    content: '';
-    position: absolute;
-    top: -16px;
-    width: 0;
-    height: 0;
-    border-left: 18px solid transparent;
-    border-right: 18px solid transparent;
-    border-bottom: 24px solid var(--accent-primary);
-    z-index: 0;
-    filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.1));
+    display: none;
+    /* 猫耳を非表示 */
 }
 
 [data-theme="tabby"] .player-section::before {
@@ -209,16 +201,8 @@
 /* Sakura theme Cat Ears */
 [data-theme="sakura"] .player-section::before,
 [data-theme="sakura"] .player-section::after {
-    content: '';
-    position: absolute;
-    top: -16px;
-    width: 0;
-    height: 0;
-    border-left: 18px solid transparent;
-    border-right: 18px solid transparent;
-    border-bottom: 24px solid #fff;
-    z-index: 0;
-    filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.05));
+    display: none;
+    /* 猫耳を非表示 */
 }
 
 [data-theme="sakura"] .player-section::before {
@@ -518,7 +502,10 @@ body::before {
     display: flex;
     align-items: center;
     gap: 12px;
+    flex: 1;
+    justify-content: space-between;
 }
+
 
 .btn-icon {
     background: rgba(255, 255, 255, 0.1);
