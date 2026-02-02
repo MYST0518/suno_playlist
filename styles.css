@@ -2706,6 +2706,17 @@ body {
 /* ===================================
    Donate & Help Floating Buttons
    =================================== */
+/* 
+   Temp: Hide all donate/support links 
+   To restore: Delete the following block 
+*/
+.donate-btn-float,
+#mobileDonateBtn,
+.donate-btn-help,
+.donate-modal {
+    display: none !important;
+}
+
 /* Mobile Action Buttons in Header (hidden on desktop) */
 .mobile-action-buttons {
     display: none;
