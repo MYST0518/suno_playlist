@@ -1023,14 +1023,21 @@ class SUNOPlaylist {
     async getShareUrl() {
         try {
             const uuids = this.playlist.map(t => t.uuid);
+
+            // Debug: Log what we're sharing
+            console.log('Sharing playlist with UUIDs:', uuids);
+            console.log('Playlist titles:', this.playlist.map(t => t.title));
+
             const response = await fetch('/api/save-playlist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ uuids })
             });
             const data = await response.json();
+            console.log('Short URL generated:', data.id, data.existing ? '(existing)' : '(new)');
             return `${window.location.origin}/p/${data.id}`;
         } catch (e) {
+            console.warn('Short URL generation failed, using compressed fallback:', e.message);
             const uuids = this.playlist.map(t => t.uuid).join(',');
             return `${window.location.origin}${window.location.pathname}?p=${LZString.compressToEncodedURIComponent(uuids)}`;
         }
@@ -1297,6 +1304,19 @@ class SUNOPlaylist {
     }
     autoSave() { this.storage.saveCurrent(this.playlist); }
     restoreLastPlaylist() {
+        // Don't restore if URL has any playlist data
+        const path = window.location.pathname;
+        const params = new URLSearchParams(window.location.search);
+
+        // Skip if:
+        // 1. Short URL format (/p/abc123)
+        // 2. Compressed URL format (?p=...)
+        // 3. Legacy format (?tracks=...)
+        if (path.startsWith('/p/') || params.get('p') || params.get('tracks')) {
+            console.log('Skipping restore: URL contains playlist data');
+            return;
+        }
+
         const c = this.storage.getCurrent();
         if (c && c.tracks.length > 0) {
             this.elements.linksInput.value = c.tracks.map(t => `https://suno.com/song/${t.uuid}`).join('\n');

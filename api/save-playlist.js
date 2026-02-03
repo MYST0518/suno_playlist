@@ -2,6 +2,7 @@
 // Saves playlist data to Vercel KV and returns short ID
 
 import { kv } from '@vercel/kv';
+import crypto from 'crypto';
 
 export default async function handler(req, res) {
     // CORS headers
@@ -25,12 +26,25 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Invalid playlist data' });
         }
 
-        // Generate short ID (6 characters: alphanumeric)
-        const shortId = generateShortId();
+        // Generate content-based hash for consistent IDs
+        const contentHash = generateContentHash(uuids);
+
+        // Check if this exact playlist already exists
+        const existingData = await kv.get(`playlist:${contentHash}`);
+        if (existingData) {
+            // Return existing ID instead of creating duplicate
+            return res.status(200).json({
+                id: contentHash,
+                url: `/p/${contentHash}`,
+                existing: true
+            });
+        }
 
         // Save to Vercel KV (expire after 30 days)
         const expirySeconds = 30 * 24 * 60 * 60; // 30 days
-        await kv.set(`playlist:${shortId}`, uuids.join(','), {
+        const playlistData = uuids.join(',');
+
+        await kv.set(`playlist:${contentHash}`, playlistData, {
             ex: expirySeconds
         });
 
@@ -38,8 +52,9 @@ export default async function handler(req, res) {
         await kv.incr('stats:total_playlists');
 
         return res.status(200).json({
-            id: shortId,
-            url: `/p/${shortId}`
+            id: contentHash,
+            url: `/p/${contentHash}`,
+            existing: false
         });
     } catch (error) {
         console.error('Save playlist error:', error);
@@ -50,12 +65,11 @@ export default async function handler(req, res) {
     }
 }
 
-// Generate a random 6-character alphanumeric ID
-function generateShortId() {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    for (let i = 0; i < 6; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
+// Generate a content-based hash (8 characters from SHA256)
+// Same playlist content = same ID every time
+function generateContentHash(uuids) {
+    const content = uuids.join(',');
+    const hash = crypto.createHash('sha256').update(content).digest('hex');
+    // Take first 8 characters for shorter, readable IDs
+    return hash.substring(0, 8);
 }
