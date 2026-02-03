@@ -919,81 +919,78 @@ textarea::placeholder {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s ease;
-    z-index: 10;
+    z-index: 20;
+    /* アルバムアートより確実に前 */
 }
 
 .cat-overlay.show {
-    opacity: 1;
+    opacity: 1 !important;
 }
 
 /* Each theme shows only its own cat */
 .cat-animation {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     display: none;
-    /* デフォルトは非表示 */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 @keyframes catFloat {
 
     0%,
     100% {
-        transform: translate(-50%, -50%) translateY(0) scale(1);
+        transform: translateY(0) scale(1);
     }
 
     50% {
-        transform: translate(-50%, -50%) translateY(-8px) scale(1.05);
+        transform: translateY(-8px) scale(1.05);
     }
 }
 
-/* Default theme: Luna (black cat) */
-.cat-luna,
-[data-theme="default"] .cat-luna {
-    display: block;
+/* Default theme: Luna (black cat) - デフォルトで表示 */
+.cat-luna {
+    display: block !important;
     animation: catFloat 3s ease-in-out infinite, catGlowLuna 2s ease-in-out infinite;
 }
 
-[data-theme="default"] .cat-sunny,
-[data-theme="default"] .cat-sakura {
-    display: none;
+/* Tabby theme: hide Luna, show Sunny */
+[data-theme="tabby"] .cat-luna {
+    display: none !important;
 }
 
-/* Tabby theme: Sunny (orange cat) */
 [data-theme="tabby"] .cat-sunny {
-    display: block;
+    display: block !important;
     animation: catFloat 3s ease-in-out infinite, catGlowSunny 2s ease-in-out infinite;
 }
 
-[data-theme="tabby"] .cat-luna,
 [data-theme="tabby"] .cat-sakura {
-    display: none;
+    display: none !important;
 }
 
-/* Sakura theme: Sakura (white cat) */
+/* Sakura theme: hide Luna, show Sakura */
+[data-theme="sakura"] .cat-luna {
+    display: none !important;
+}
+
+[data-theme="sakura"] .cat-sunny {
+    display: none !important;
+}
+
 [data-theme="sakura"] .cat-sakura {
-    display: block;
+    display: block !important;
     animation: catFloat 3s ease-in-out infinite, catGlowSakura 2s ease-in-out infinite;
 }
 
-[data-theme="sakura"] .cat-luna,
-[data-theme="sakura"] .cat-sunny {
-    display: none;
-}
-
+/* Glow animations for each cat */
 @keyframes catGlowLuna {
 
     0%,
     100% {
-        filter: drop-shadow(0 0 20px rgba(173, 255, 47, 0.5));
+        filter: drop-shadow(0 0 20px rgba(173, 255, 47, 0.6));
     }
 
     50% {
-        filter: drop-shadow(0 0 30px rgba(173, 255, 47, 0.8));
+        filter: drop-shadow(0 0 30px rgba(173, 255, 47, 0.9));
     }
 }
 
@@ -1001,11 +998,11 @@ textarea::placeholder {
 
     0%,
     100% {
-        filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.5));
+        filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.6));
     }
 
     50% {
-        filter: drop-shadow(0 0 30px rgba(255, 140, 0, 0.8));
+        filter: drop-shadow(0 0 30px rgba(255, 140, 0, 0.9));
     }
 }
 
@@ -1013,11 +1010,11 @@ textarea::placeholder {
 
     0%,
     100% {
-        filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.5));
+        filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.6));
     }
 
     50% {
-        filter: drop-shadow(0 0 30px rgba(255, 105, 180, 0.8));
+        filter: drop-shadow(0 0 30px rgba(255, 105, 180, 0.9));
     }
 }
 
