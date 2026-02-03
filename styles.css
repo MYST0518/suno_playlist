@@ -926,45 +926,6 @@ textarea::placeholder {
     opacity: 1;
 }
 
-.cat-animation {
-    width: 90%;
-    height: 90%;
-    object-fit: contain;
-    animation: catFloat 3s ease-in-out infinite, catGlow 2s ease-in-out infinite;
-    filter: drop-shadow(0 0 20px rgba(173, 255, 47, 0.5));
-}
-
-@keyframes catFloat {
-
-    0%,
-    100% {
-        transform: translateY(0) scale(1);
-    }
-
-    50% {
-        transform: translateY(-8px) scale(1.05);
-    }
-}
-
-@keyframes catGlow {
-
-    0%,
-    100% {
-        filter: drop-shadow(0 0 20px rgba(173, 255, 47, 0.5));
-    }
-
-    50% {
-        filter: drop-shadow(0 0 30px rgba(173, 255, 47, 0.8));
-    }
-}
-
-/* Hide cat overlay on non-default themes */
-[data-theme="tabby"] .cat-overlay,
-[data-theme="sakura"] .cat-overlay {
-    display: flex;
-    /* 表示するように変更 */
-}
-
 /* Each theme shows only its own cat */
 .cat-animation {
     width: 90%;
@@ -972,17 +933,29 @@ textarea::placeholder {
     object-fit: contain;
     display: none;
     /* デフォルトは非表示 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes catFloat {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) translateY(-8px) scale(1.05);
+    }
 }
 
 /* Default theme: Luna (black cat) */
-.cat-luna {
-    display: block;
-    animation: catFloat 3s ease-in-out infinite, catGlowLuna 2s ease-in-out infinite;
-    filter: drop-shadow(0 0 20px rgba(173, 255, 47, 0.5));
-}
-
+.cat-luna,
 [data-theme="default"] .cat-luna {
     display: block;
+    animation: catFloat 3s ease-in-out infinite, catGlowLuna 2s ease-in-out infinite;
 }
 
 [data-theme="default"] .cat-sunny,
@@ -994,7 +967,6 @@ textarea::placeholder {
 [data-theme="tabby"] .cat-sunny {
     display: block;
     animation: catFloat 3s ease-in-out infinite, catGlowSunny 2s ease-in-out infinite;
-    filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.5));
 }
 
 [data-theme="tabby"] .cat-luna,
@@ -1006,7 +978,6 @@ textarea::placeholder {
 [data-theme="sakura"] .cat-sakura {
     display: block;
     animation: catFloat 3s ease-in-out infinite, catGlowSakura 2s ease-in-out infinite;
-    filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.5));
 }
 
 [data-theme="sakura"] .cat-luna,
