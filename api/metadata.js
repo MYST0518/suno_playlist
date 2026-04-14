@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
 // Fetch metadata from SUNO song page
 async function fetchSunoMetadata(uuid) {
-    const url = `https://suno.com/song/${uuid}`;
+    const url = `https://suno.com/embed/${uuid}`;
 
     try {
         const controller = new AbortController();
@@ -59,24 +59,55 @@ async function fetchSunoMetadata(uuid) {
 
         const data = await response.text();
 
-        // Extract title and artist from HTML (basic scraping)
-        const titleMatch = data.match(/<title>([^<]+)<\/title>/i);
-        const title = titleMatch ? titleMatch[1].split(' by ')[0].replace(' | Suno', '').trim() : 'Unknown Title';
-        const artistMatch = data.match(/by ([^|]+)\|/i) || data.match(/artist":"([^"]+)"/i);
-        const artist = artistMatch ? artistMatch[1].trim() : 'Suno';
+        // Extract Title (OG Title is most reliable)
+        const ogTitleMatch = data.match(/property="og:title"\s+content="([^"]+)"/i) ||
+            data.match(/content="([^"]+)"\s+property="og:title"/i);
+        const twitterTitleMatch = data.match(/name="twitter:title"\s+content="([^"]+)"/i);
+        const titleTagMatch = data.match(/<title>([^<]+)<\/title>/i);
 
-        // Improved thumbnail extraction
+        let title = 'Unknown Title';
+        if (ogTitleMatch) {
+            title = ogTitleMatch[1];
+        } else if (twitterTitleMatch) {
+            title = twitterTitleMatch[1];
+        } else if (titleTagMatch) {
+            title = titleTagMatch[1].split(' by ')[0].replace(' | Suno', '').trim();
+        }
+
+        // Extract Artist
+        const ogDescMatch = data.match(/property="og:description"\s+content="([^"]+)"/i);
+        const twitterDescMatch = data.match(/name="twitter:description"\s+content="([^"]+)"/i);
+
+        let artist = 'Suno';
+        const artistRegex = /by (.*?)(?:\s+|$)/i;
+
+        if (ogDescMatch && ogDescMatch[1].includes('by ')) {
+            const match = ogDescMatch[1].match(artistRegex);
+            if (match) artist = match[1].split('(')[0].trim();
+        } else if (twitterDescMatch && twitterDescMatch[1].includes('by ')) {
+            const match = twitterDescMatch[1].match(artistRegex);
+            if (match) artist = match[1].split('(')[0].trim();
+        } else if (titleTagMatch) {
+            const match = titleTagMatch[1].match(/by (.*?) (?:\||Suno)/i);
+            if (match) artist = match[1].trim();
+        }
+
+        // Extract Thumbnail
         const ogImageMatch = data.match(/property="og:image"\s+content="([^"]+)"/i) ||
             data.match(/content="([^"]+)"\s+property="og:image"/i);
+        const twitterImageMatch = data.match(/name="twitter:image"\s+content="([^"]+)"/i);
         const jsonImageMatch = data.match(/"image_url":"([^"]+)"/i) ||
             data.match(/"imageUrl":"([^"]+)"/i);
         const fallbackThumb = `https://cdn1.suno.ai/image_${uuid}.png`;
-        const thumbnail = ogImageMatch ? ogImageMatch[1] : (jsonImageMatch ? jsonImageMatch[1] : fallbackThumb);
+
+        const thumbnail = ogImageMatch ? ogImageMatch[1] :
+            (twitterImageMatch ? twitterImageMatch[1] :
+                (jsonImageMatch ? jsonImageMatch[1] : fallbackThumb));
 
         return {
             uuid,
-            title,
-            artist,
+            title: decodeHtml(title),
+            artist: decodeHtml(artist),
             thumbnail: thumbnail
         };
     } catch (error) {
@@ -85,4 +116,15 @@ async function fetchSunoMetadata(uuid) {
         }
         return { title: null, artist: null, error: error.message };
     }
+}
+
+// Helper to decode HTML entities in string
+function decodeHtml(html) {
+    if (!html) return '';
+    return html.replace(/&quot;/g, '"')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&#039;/g, "'")
+        .replace(/&apos;/g, "'");
 }
