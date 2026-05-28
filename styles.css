@@ -1,4 +1,4 @@
-﻿/* ===================================
+/* ===================================
    CSS Variables & Theme
    =================================== */
 
@@ -542,6 +542,31 @@ body::before {
     transition: all 0.3s ease;
 }
 
+.playlist-name-container {
+    margin-bottom: var(--spacing-sm);
+}
+
+#playlistNameInput {
+    width: 100%;
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: var(--transition-fast);
+}
+
+#playlistNameInput:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+#playlistNameInput::placeholder {
+    color: var(--text-muted);
+}
 
 textarea {
     width: 100%;
@@ -867,6 +892,54 @@ textarea::placeholder {
     box-shadow: var(--shadow-glow);
 }
 
+.playlist-display-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px dashed var(--border-color);
+    display: none; /* Shown dynamically in JS */
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.playlist-display-name:hover {
+    opacity: 0.85;
+}
+
+.playlist-display-name::after {
+    content: ' ✏️';
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    display: inline-block;
+    -webkit-text-fill-color: var(--text-secondary);
+}
+
+.playlist-display-name:hover::after {
+    opacity: 0.7;
+}
+
+.playlist-name-edit-input {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid var(--accent-primary) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-primary) !important;
+    font-family: inherit !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    padding: 4px 8px !important;
+    outline: none !important;
+    -webkit-background-clip: padding-box !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+
 .now-playing {
     display: flex;
     align-items: center;
@@ -1030,7 +1103,6 @@ textarea::placeholder {
     border-radius: var(--radius-full);
     background: rgba(255, 255, 255, 0.1);
     color: var(--text-primary);
-    font-size: 1.2rem;
     cursor: pointer;
     transition: var(--transition-fast);
     display: flex;
@@ -1043,16 +1115,82 @@ textarea::placeholder {
     transform: scale(1.05);
 }
 
+.control-btn svg {
+    display: block;
+    transition: transform var(--transition-fast);
+}
+
+.control-btn:hover svg {
+    transform: scale(1.05);
+}
+
 .play-btn {
     width: 64px;
     height: 64px;
     background: var(--gradient-primary);
-    font-size: 1.5rem;
     box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
 }
 
 .play-btn:hover {
     box-shadow: 0 6px 30px rgba(255, 107, 53, 0.5);
+}
+
+/* Play/Pause SVG Toggle */
+.play-btn .pause-svg {
+    display: none;
+}
+.play-btn.playing .play-svg {
+    display: none;
+}
+.play-btn.playing .pause-svg {
+    display: block !important;
+}
+
+/* Active buttons (like active shuffle or repeat) */
+.control-btn.active {
+    background: var(--gradient-primary) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4) !important;
+}
+
+.control-btn.active:hover {
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5) !important;
+}
+
+/* Repeat Mode One Badge */
+.control-btn#repeatBtn {
+    position: relative;
+}
+
+.control-btn#repeatBtn[data-mode="one"]::after {
+    content: '1';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: var(--accent-secondary);
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 800;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    line-height: 1;
+}
+
+/* Tabby Theme repeat badge adjustment */
+[data-theme="tabby"] .control-btn#repeatBtn[data-mode="one"]::after {
+    background: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+/* Sakura Theme repeat badge adjustment */
+[data-theme="sakura"] .control-btn#repeatBtn[data-mode="one"]::after {
+    background: var(--accent-tertiary);
+    color: white;
 }
 
 /* Volume */
@@ -1063,8 +1201,15 @@ textarea::placeholder {
     gap: var(--spacing-sm);
 }
 
-.volume-icon {
-    font-size: 1rem;
+.volume-btn {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    padding: 0;
+}
+
+.volume-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 #volumeSlider {
@@ -1279,7 +1424,7 @@ textarea::placeholder {
 .item-actions {
     display: flex;
     gap: var(--spacing-xs);
-    opacity: 0;
+    opacity: 0.8;
     transition: var(--transition-fast);
     margin-left: var(--spacing-sm);
     pointer-events: auto;
@@ -1296,7 +1441,7 @@ textarea::placeholder {
 /* Always show actions on touch devices since there's no hover */
 @media (hover: none) {
     .item-actions {
-        opacity: 0.7;
+        opacity: 0.8;
     }
 }
 
@@ -1419,7 +1564,7 @@ textarea::placeholder {
     display: flex;
     gap: 4px;
     margin-left: var(--spacing-xs);
-    opacity: 0;
+    opacity: 0.8;
     transition: var(--transition-fast);
 }
 
@@ -1491,6 +1636,8 @@ textarea::placeholder {
     transform: translateY(-10px);
     transition: var(--transition-fast);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    max-height: none;
+    overflow: visible;
 }
 
 .share-dropdown.show {
@@ -1804,8 +1951,11 @@ textarea::placeholder {
 
 /* Secondary buttons */
 .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: 1.2rem;
+    font-size: 1rem;
     background: rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
@@ -1818,6 +1968,67 @@ textarea::placeholder {
     background: rgba(255, 255, 255, 0.12);
     border-color: var(--accent-primary);
     transform: translateY(-2px);
+}
+
+/* Playlist Actions specific square buttons */
+.playlist-actions .btn-secondary {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+}
+
+.playlist-actions .btn-secondary svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    stroke: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+.playlist-actions .btn-secondary:hover svg {
+    stroke: var(--text-primary);
+    transform: scale(1.05);
+}
+
+/* Share, Edit and Create Own buttons SVG hover animations */
+.btn-share svg,
+#editBtn svg,
+#createOwnBtn svg {
+    display: block;
+    transition: var(--transition-fast);
+}
+
+.btn-share:hover svg,
+#editBtn:hover svg,
+#createOwnBtn:hover svg {
+    transform: scale(1.05);
+}
+
+/* Close button SVG styles */
+.btn-close svg {
+    display: block;
+    width: 14px;
+    height: 14px;
+    stroke: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+.btn-close:hover svg {
+    stroke: var(--text-primary);
+    transform: rotate(90deg);
+}
+
+.btn-close-modal svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    stroke: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+.btn-close-modal:hover svg {
+    stroke: var(--text-primary);
+    transform: scale(1.1) rotate(90deg);
 }
 
 
