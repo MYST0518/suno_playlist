@@ -15,8 +15,11 @@ const translations = {
 
         // Input Section
         inputTitle: 'リンク入力',
+        playlistNamePlaceholder: 'プレイリスト名（任意、最大30文字）',
+        untitledPlaylist: '（無題のプレイリスト）',
         inputPlaceholder: 'SUNOの曲リンク（1行に1曲）または短縮リンク（s.suno.ai/xxxxx）を入力してください',
         loadPlaylistBtn: 'プレイリスト作成',
+        clearInputBtn: '入力をクリア',
 
         // Player Controls
         previous: '前へ',
@@ -47,6 +50,7 @@ const translations = {
         shareLine: 'LINEで共有',
         shareFacebook: 'Facebookで共有',
         shareCopy: 'URLをコピー',
+        shareTweetText: 'Suno AIのプレイリストを作成しました！ 🎧',
 
         // Help Modal
         helpTitle: 'ヘルプ',
@@ -107,6 +111,8 @@ const translations = {
         toastPlaylistSaved: 'プレイリストをダウンロードしました',
         toastPlaylistImported: '曲をインポートしました',
         toastPlaylistCleared: 'プレイリストをクリアしました',
+        toastInputCleared: '入力をクリアしました',
+        toastInstagramCopied: 'リンクをコピーしました！インスタのストーリーズやプロフィールに貼り付けて共有してね📸',
         toastFavoriteAdded: 'お気に入りに追加',
         toastFavoriteRemoved: 'お気に入りから削除',
         toastSharing: '共有中...',
@@ -123,6 +129,8 @@ const translations = {
         errorOffline: 'オフラインです',
 
         // Buttons
+        editLinksBtn: '編集',
+        createOwnBtn: '新規作成',
         close: '閉じる',
         cancel: 'キャンセル',
         ok: 'OK',
@@ -172,8 +180,11 @@ const translations = {
 
         // Input Section
         inputTitle: 'Add Links',
+        playlistNamePlaceholder: 'Playlist name (Optional, max 30 chars)',
+        untitledPlaylist: '(Untitled Playlist)',
         inputPlaceholder: 'Paste SUNO song links (one per line) or short links (s.suno.ai/xxxxx)',
         loadPlaylistBtn: 'Create Playlist',
+        clearInputBtn: 'Clear Input',
 
         // Player Controls
         previous: 'Previous',
@@ -204,6 +215,7 @@ const translations = {
         shareLine: 'Share on LINE',
         shareFacebook: 'Share on Facebook',
         shareCopy: 'Copy URL',
+        shareTweetText: 'Created a Suno AI playlist! 🎧',
 
         // Help Modal
         helpTitle: 'Help',
@@ -263,6 +275,8 @@ const translations = {
         toastPlaylistSaved: 'Playlist downloaded',
         toastPlaylistImported: 'tracks imported',
         toastPlaylistCleared: 'Playlist cleared',
+        toastInputCleared: 'Input cleared',
+        toastInstagramCopied: 'Link copied! Paste it in Instagram Stories or bio to share 📸',
         toastFavoriteAdded: 'Added to favorites',
         toastFavoriteRemoved: 'Removed from favorites',
         toastSharing: 'Sharing...',
@@ -284,6 +298,8 @@ const translations = {
         errorOffline: 'Offline',
 
         // Buttons
+        editLinksBtn: 'Edit',
+        createOwnBtn: 'New Playlist',
         close: 'Close',
         cancel: 'Cancel',
         ok: 'OK',
@@ -328,8 +344,11 @@ const translations = {
 
         // Input Section
         inputTitle: '添加链接',
+        playlistNamePlaceholder: '播放列表名称（选填，最多30个字符）',
+        untitledPlaylist: '（无标题播放列表）',
         inputPlaceholder: '粘贴SUNO歌曲链接（每行一首）或短链接（s.suno.ai/xxxxx）',
         loadPlaylistBtn: '创建播放列表',
+        clearInputBtn: '清空输入',
 
         // Player Controls
         previous: '上一首',
@@ -360,6 +379,7 @@ const translations = {
         shareLine: '分享到 LINE',
         shareFacebook: '分享到 Facebook',
         shareCopy: '复制链接',
+        shareTweetText: '创建了 Suno AI 播放列表！ 🎧',
 
         // Help Modal
         helpTitle: '帮助',
@@ -420,6 +440,8 @@ const translations = {
         toastPlaylistSaved: '播放列表已下载',
         toastPlaylistImported: '首歌曲已导入',
         toastPlaylistCleared: '播放列表已清空',
+        toastInputCleared: '输入已清空',
+        toastInstagramCopied: '链接已复制！请粘贴到Instagram故事或个人简介中分享📸',
         toastFavoriteAdded: '已添加到收藏',
         toastFavoriteRemoved: '已从收藏中移除',
         toastSharing: '分享中...',
@@ -439,6 +461,8 @@ const translations = {
         errorOffline: '离线',
 
         // Buttons
+        editLinksBtn: '编辑',
+        createOwnBtn: '新建播放列表',
         close: '关闭',
         cancel: '取消',
         ok: '确定',
@@ -482,8 +506,11 @@ const translations = {
 
         // Input Section
         inputTitle: '링크 추가',
+        playlistNamePlaceholder: '재생목록 이름 (선택, 최대 30자)',
+        untitledPlaylist: '(제목 없는 재생목록)',
         inputPlaceholder: 'SUNO 노래 링크를 붙여넣기 (한 줄에 하나씩) 또는 단축 링크 (s.suno.ai/xxxxx)',
         loadPlaylistBtn: '재생목록 만들기',
+        clearInputBtn: '입력 초기화',
 
         // Player Controls
         previous: '이전',
@@ -514,6 +541,7 @@ const translations = {
         shareLine: 'LINE으로 공유',
         shareFacebook: 'Facebook으로 공유',
         shareCopy: 'URL 복사',
+        shareTweetText: 'Suno AI 플레이리스트를 만들었습니다! 🎧',
 
         // Help Modal
         helpTitle: '도움말',
@@ -574,6 +602,8 @@ const translations = {
         toastPlaylistSaved: '재생목록이 다운로드되었습니다',
         toastPlaylistImported: '곡을 가져왔습니다',
         toastPlaylistCleared: '재생목록이 지워졌습니다',
+        toastInputCleared: '입력이 초기화되었습니다',
+        toastInstagramCopied: '링크가 복사되었습니다! 인스타그램 스토리나 프로필에 붙여넣어 공유해 보세요📸',
         toastFavoriteAdded: '즐겨찾기에 추가',
         toastFavoriteRemoved: '즐겨찾기에서 제거',
         toastSharing: '공유 중...',
@@ -593,6 +623,8 @@ const translations = {
         errorOffline: '오프라인',
 
         // Buttons
+        editLinksBtn: '편집',
+        createOwnBtn: '새 재생목록',
         close: '닫기',
         cancel: '취소',
         ok: '확인',
